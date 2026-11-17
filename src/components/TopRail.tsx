@@ -11,10 +11,10 @@ interface TopRailProps {
 }
 
 const NAV_ITEMS = [
-  { id: 'works', index: '01', label: 'Works' },
-  { id: 'strata', index: '02', label: 'Strata' },
-  { id: 'capabilities', index: '03', label: 'Matrix' },
-  { id: 'specimen', index: '04', label: 'Dark Room' },
+  { id: 'aperture', index: '01', label: 'Aperture' },
+  { id: 'works', index: '02', label: 'Plates' },
+  { id: 'shapes', index: '03', label: 'Matter' },
+  { id: 'capabilities', index: '04', label: 'Craft' },
   { id: 'practice', index: '05', label: 'Practice' },
 ];
 
@@ -42,7 +42,6 @@ export function TopRail({
 
   const isDarkRoom =
     activeSection === 'aperture' ||
-    activeSection === 'specimen' ||
     activeSection === 'taktil';
 
   return (
@@ -77,8 +76,8 @@ export function TopRail({
           {NAV_ITEMS.map((item) => {
             const isActive =
               activeSection === item.id ||
-              (item.id === 'specimen' && activeSection === 'taktil') ||
-              (item.id === 'works' && activeSection === 'aperture');
+              (item.id === 'capabilities' && activeSection === 'taktil') ||
+              (item.id === 'aperture' && activeSection === 'typo');
             return (
               <NavScrambleLink
                 key={item.id}

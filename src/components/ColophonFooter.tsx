@@ -39,8 +39,26 @@ export function ColophonFooter({
   onOpenCommission,
   onCloseCommission,
 }: ColophonFooterProps) {
-  const [zurichTime, setZurichTime] = useState('');
-  const [jakartaTime, setJakartaTime] = useState('');
+  const [zurichTime, setZurichTime] = useState(() => {
+    const formatted = new Intl.DateTimeFormat('en-GB', {
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
+      hour12: false,
+      timeZone: 'Europe/Zurich',
+    }).format(new Date());
+    return `${formatted} CET`;
+  });
+  const [jakartaTime, setJakartaTime] = useState(() => {
+    const formatted = new Intl.DateTimeFormat('en-GB', {
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
+      hour12: false,
+      timeZone: 'Asia/Jakarta',
+    }).format(new Date());
+    return `${formatted} WIB`;
+  });
   const [selectedScope, setSelectedScope] = useState<string>(
     SCOPE_OPTIONS[0].id
   );

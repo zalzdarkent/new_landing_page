@@ -1,6 +1,6 @@
-import { useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
-import { Environment, RoundedBox } from '@react-three/drei';
+import { RoundedBox } from '@react-three/drei';
 import * as THREE from 'three';
 
 export type MonolithMode = 'assembled' | 'exploded' | 'wireframe' | 'solar';
@@ -39,7 +39,6 @@ function MonolithAssembly({
     const t = state.clock.getElapsedTime();
     const scrollOffset = scrollProgress.current;
 
-    // Update directional light position from sunAzimuth + solar mode orbit
     if (sunLightRef.current) {
       const rad =
         THREE.MathUtils.degToRad(sunAzimuth) +
@@ -95,7 +94,6 @@ function MonolithAssembly({
       groupRef.current.scale.setScalar(nextScale);
     }
 
-    // Exploded vs Assembled target coordinates for each architectural component
     const spread = isExploded ? 1 : 0;
     const breath = reducedMotion ? 0 : Math.sin(t * 0.8) * 0.025;
 
@@ -209,19 +207,22 @@ function MonolithAssembly({
       <directionalLight
         ref={sunLightRef}
         position={[4, 6, 5]}
-        intensity={isSolar ? 2.1 : 1.45}
+        intensity={isSolar ? 2.2 : 1.6}
         color={isSolar ? '#FFE8C8' : '#FFFBF4'}
       />
       <directionalLight
         position={[-4, -3, 2]}
-        intensity={isSolar ? 0.25 : 0.45}
+        intensity={isSolar ? 0.35 : 0.65}
         color="#CFC9BE"
+      />
+      <hemisphereLight
+        args={['#FFFDF9', '#8A8479', isSolar ? 0.45 : 0.75]}
       />
 
       <group ref={groupRef}>
         {/* Ambient Orthographic Datum Ring */}
         <mesh ref={ringRef} position={[0.1, 0, -0.35]} rotation={[1.1, 0, 0]}>
-          <torusGeometry args={[1.65, 0.006, 16, 96]} />
+          <torusGeometry args={[1.65, 0.006, 12, 72]} />
           <meshBasicMaterial
             color={isWire ? '#D9381E' : '#8C877E'}
             transparent
@@ -234,7 +235,7 @@ function MonolithAssembly({
           ref={limestoneRef}
           args={[1.55, 2.25, 0.5]}
           radius={0.025}
-          smoothness={4}
+          smoothness={3}
           position={[-0.2, -0.05, 0]}
         >
           <meshStandardMaterial
@@ -266,7 +267,7 @@ function MonolithAssembly({
           ref={basaltRef}
           args={[0.84, 1.38, 0.38]}
           radius={0.02}
-          smoothness={4}
+          smoothness={3}
           position={[0.72, -0.45, -0.22]}
         >
           <meshStandardMaterial
@@ -277,26 +278,23 @@ function MonolithAssembly({
           />
         </RoundedBox>
 
-        {/* Optical Glass Refraction Plane */}
+        {/* Optical Glass Plane (Single-pass GPU friendly) */}
         <RoundedBox
           ref={glassRef}
           args={[1.24, 1.64, 0.11]}
           radius={0.015}
-          smoothness={4}
+          smoothness={3}
           position={[0.28, 0.16, 0.38]}
         >
           {isWire ? (
             <meshBasicMaterial color="#D9381E" wireframe />
           ) : (
-            <meshPhysicalMaterial
+            <meshStandardMaterial
               color="#F5F3EE"
-              transmission={0.8}
-              opacity={1}
               transparent
-              roughness={0.08}
-              ior={1.48}
-              thickness={0.6}
-              reflectivity={0.7}
+              opacity={0.72}
+              roughness={0.12}
+              metalness={0.22}
             />
           )}
         </RoundedBox>
@@ -307,7 +305,7 @@ function MonolithAssembly({
           position={[-0.82, 0.86, 0.28]}
           rotation={[Math.PI / 2, 0, 0]}
         >
-          <cylinderGeometry args={[0.048, 0.048, 0.28, 24]} />
+          <cylinderGeometry args={[0.048, 0.048, 0.28, 20]} />
           <meshStandardMaterial
             color="#D9381E"
             roughness={0.32}
@@ -334,10 +332,27 @@ export function HeroMonolith({
   sunAzimuth,
   onPointerTelemetry,
 }: HeroMonolithProps) {
+  const containerRef = useRef<HTMLDivElement>(null);
   const pointerRef = useRef({ x: 0, y: 0 });
+  const [inView, setInView] = useState(true);
+
+  // Pause WebGL RAF loop when Hero is scrolled offscreen (frontend-atlas performance-a11y.md)
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        setInView(entry.isIntersecting);
+      },
+      { rootMargin: '100px' }
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
 
   return (
     <div
+      ref={containerRef}
       data-cursor="drag"
       data-cursor-label="ORBIT"
       className={`relative h-[320px] w-full overflow-hidden rounded-[2px] border border-[var(--border-hairline)] transition-colors duration-300 sm:h-[420px] lg:h-[540px] ${
@@ -398,7 +413,7 @@ export function HeroMonolith({
           stroke="currentColor"
           strokeWidth="0.6"
           strokeDasharray="2 6"
-          className=" origin-center fw-orbit-slow"
+          className="origin-center fw-orbit-slow"
         />
         <circle
           cx="200"
@@ -423,15 +438,12 @@ export function HeroMonolith({
       </div>
 
       <Canvas
-        dpr={[1, 2]}
+        frameloop={inView && !reducedMotion ? 'always' : 'demand'}
+        dpr={[1, 1.5]}
         camera={{ position: [0, 0, 5.3], fov: 32 }}
-        gl={{ antialias: true, alpha: true }}
+        gl={{ antialias: true, alpha: true, powerPreference: 'high-performance' }}
       >
-        <ambientLight intensity={mode === 'solar' ? 0.22 : 0.48} />
-        <Environment
-          preset="studio"
-          environmentIntensity={mode === 'solar' ? 0.25 : 0.42}
-        />
+        <ambientLight intensity={mode === 'solar' ? 0.25 : 0.55} />
         <MonolithAssembly
           pointer={pointerRef.current}
           scrollProgress={scrollProgress}

@@ -1,4 +1,4 @@
-import { Suspense, lazy, useEffect, useRef, useState } from 'react';
+import { Suspense, lazy, useCallback, useEffect, useRef, useState } from 'react';
 import anime from 'animejs';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -41,20 +41,28 @@ export function HeroSection({
   const inlineFrameRef = useRef<HTMLButtonElement>(null);
   const metaRef = useRef<HTMLDivElement>(null);
   const spotlightRef = useRef<HTMLDivElement>(null);
+  const vecTextRef = useRef<HTMLSpanElement>(null);
+  const scrubTextRef = useRef<HTMLSpanElement>(null);
   const monolithScrollRef = useRef(0);
 
   const [wordIndex, setWordIndex] = useState(0);
   const [wordPaused, setWordPaused] = useState(false);
   const [monolithMode, setMonolithMode] = useState<MonolithMode>('assembled');
   const [sunAzimuth, setSunAzimuth] = useState<number>(28);
-  const [pointerCoords, setPointerCoords] = useState({ x: 0, y: 0 });
-  const [scrollPct, setScrollPct] = useState(0);
 
-  // Subtle magnetic pull on the primary CTA
   const btnX = useMotionValue(0);
   const btnY = useMotionValue(0);
   const springX = useSpring(btnX, { stiffness: 220, damping: 24, mass: 0.8 });
   const springY = useSpring(btnY, { stiffness: 220, damping: 24, mass: 0.8 });
+
+  const handlePointerTelemetry = useCallback(
+    (coords: { x: number; y: number }) => {
+      if (vecTextRef.current) {
+        vecTextRef.current.textContent = `VEC [${coords.x.toFixed(2)}, ${coords.y.toFixed(2)}]`;
+      }
+    },
+    []
+  );
 
   // Rotating kinetic word slot (frontend-atlas text-effects.md#8)
   useEffect(() => {
@@ -65,7 +73,7 @@ export function HeroSection({
     return () => window.clearInterval(id);
   }, [reducedMotion, wordPaused]);
 
-  // Choreographed entrance + scroll telemetry
+  // Choreographed entrance + scroll telemetry (via DOM ref, zero React re-renders)
   useEffect(() => {
     if (reducedMotion || !headlineRef.current) return;
 
@@ -113,7 +121,10 @@ export function HeroSection({
       end: 'bottom top',
       onUpdate: (self) => {
         monolithScrollRef.current = self.progress;
-        setScrollPct(Math.round(self.progress * 100));
+        if (scrubTextRef.current) {
+          const pct = Math.round(self.progress * 100);
+          scrubTextRef.current.textContent = `SCRUB ${String(pct).padStart(2, '0')}%`;
+        }
       },
     });
 
@@ -163,17 +174,20 @@ export function HeroSection({
               <span className="relative inline-flex h-2 w-2 rounded-full bg-[var(--accent-vermilion)]" />
             </span>
             <span className="type-meta uppercase">
-              EDITION IV // ARCHITECTURE OF DIGITAL MATTER
+              ARCHITECTURE OF DIGITAL MATTER
             </span>
           </div>
 
           <div className="hidden items-center gap-6 sm:flex">
-            <span className="type-meta">
-              VEC [{pointerCoords.x.toFixed(2)}, {pointerCoords.y.toFixed(2)}]
+            <span ref={vecTextRef} className="type-meta">
+              VEC [0.00, 0.00]
             </span>
             <span className="type-meta">SUN {sunAzimuth}° AZM</span>
-            <span className="type-meta text-[var(--ink-primary)]">
-              SCRUB {String(scrollPct).padStart(2, '0')}%
+            <span
+              ref={scrubTextRef}
+              className="type-meta text-[var(--ink-primary)]"
+            >
+              SCRUB 00%
             </span>
           </div>
         </div>
@@ -207,7 +221,6 @@ export function HeroSection({
               <span className="block overflow-hidden pb-1">
                 <span className="hero-line-inner flex flex-wrap items-baseline gap-x-3 sm:gap-x-4">
                   <span>with</span>
-                  {/* Inline type-height architectural plate with live hover zoom */}
                   <button
                     type="button"
                     ref={inlineFrameRef}
@@ -226,7 +239,7 @@ export function HeroSection({
                 </span>
               </span>
 
-              {/* Height-masked rotating kinetic word slot */}
+              {/* Height-masked rotating kinetic word slot (fixed width prevents layout shift) */}
               <span className="block overflow-hidden pb-2">
                 <span className="hero-line-inner flex flex-wrap items-baseline gap-x-3">
                   <button
@@ -241,7 +254,7 @@ export function HeroSection({
                     aria-label={`Current principle: ${ROTATING_WORDS[wordIndex]}. Click to cycle.`}
                     className="group relative inline-flex items-baseline text-left text-[var(--accent-vermilion)]"
                   >
-                    <span className="relative inline-grid overflow-hidden pb-1">
+                    <span className="relative inline-grid min-w-[6.2em] overflow-hidden pb-1">
                       <AnimatePresence mode="popLayout" initial={false}>
                         <motion.span
                           key={ROTATING_WORDS[wordIndex]}
@@ -288,11 +301,9 @@ export function HeroSection({
               className="mt-7 border-t border-[var(--border-hairline)] pt-6 lg:mt-10"
             >
               <div className="flex flex-col items-start justify-between gap-6 sm:flex-row sm:items-end">
-                <p className="max-w-[46ch] text-base leading-relaxed text-[var(--ink-secondary)]">
-                  FORMWORK® is an independent spatial, typographic, and
-                  design-engineering practice. We reject weightless templates to
-                  build flagship web architectures, digital monographs, and
-                  hardware companion instruments with physical mass.
+                <p className="max-w-[36ch] text-base leading-relaxed text-[var(--ink-secondary)]">
+                  Spatial, typographic, and kinetic systems cast with physical
+                  mass.
                 </p>
 
                 <div className="flex flex-wrap items-center gap-3">
@@ -345,10 +356,10 @@ export function HeroSection({
               {/* Interactive Chapter Jump Index */}
               <div className="mt-6 grid grid-cols-2 gap-2 border-t border-[var(--border-hairline)] pt-4 sm:grid-cols-4">
                 {[
-                  { id: 'aperture', code: '03', label: 'Light Aperture' },
-                  { id: 'strata', code: '05', label: '4-Layer Strata' },
-                  { id: 'specimen', code: '09', label: 'Dark-Room Lab' },
-                  { id: 'taktil', code: '10', label: 'Taktil Console' },
+                  { id: 'aperture', code: '01', label: 'Light Aperture' },
+                  { id: 'typo', code: '02', label: 'Form + Work' },
+                  { id: 'works', code: '03', label: 'Four Plates' },
+                  { id: 'taktil', code: '04', label: 'Taktil Console' },
                 ].map((jump) => (
                   <button
                     key={jump.id}
@@ -392,7 +403,7 @@ export function HeroSection({
                 scrollProgress={monolithScrollRef}
                 mode={monolithMode}
                 sunAzimuth={sunAzimuth}
-                onPointerTelemetry={setPointerCoords}
+                onPointerTelemetry={handlePointerTelemetry}
               />
             </Suspense>
 
@@ -463,9 +474,8 @@ export function HeroSection({
       <div className="fw-container relative z-10 mt-8">
         <div className="flex flex-wrap items-center justify-between gap-4 border-t border-[var(--border-hairline)] pt-3.5 text-[var(--ink-secondary)]">
           <span className="type-meta">
-            47.3879° N, 8.5170° E (ZRH) — 6.2615° S, 106.8106° E (JKT)
+            SCROLL TO MORPH ↓
           </span>
-          <span className="type-meta">CHAPTER 01 / 15 — SCROLL TO EXCAVATE ↓</span>
         </div>
       </div>
     </section>

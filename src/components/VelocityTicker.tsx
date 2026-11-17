@@ -12,13 +12,13 @@ const TRACK_A_ITEMS = [
   '60FPS COMPOSITOR CHOREOGRAPHY',
 ];
 
-const TRACK_B_ITEMS = [
-  'BAY RATIO 1 : 1.618',
-  'SHADOW GAP TOLERANCE 0.02MM',
-  'SPRING CONSTANT k=220 c=24',
-  'PBR IOR 1.48 BOROSILICATE',
-  'APCA Lc 92 DARK-ROOM CONTRAST',
-];
+// const TRACK_B_ITEMS = [
+//   'BAY RATIO 1 : 1.618',
+//   'SHADOW GAP TOLERANCE 0.02MM',
+//   'SPRING CONSTANT k=220 c=24',
+//   'PBR IOR 1.48 BOROSILICATE',
+//   'APCA Lc 92 DARK-ROOM CONTRAST',
+// ];
 
 export function VelocityTicker({ reducedMotion }: { reducedMotion: boolean }) {
   const rootRef = useRef<HTMLDivElement>(null);
@@ -116,7 +116,7 @@ export function VelocityTicker({ reducedMotion }: { reducedMotion: boolean }) {
       </div>
 
       {/* Counter-Rotating Telemetry Stream */}
-      <div className="bg-[var(--bg-canvas)]/60 py-2.5">
+      {/* <div className="bg-[var(--bg-canvas)]/60 py-2.5">
         <div
           ref={trackBRef}
           className="flex w-max items-center whitespace-nowrap"
@@ -135,7 +135,7 @@ export function VelocityTicker({ reducedMotion }: { reducedMotion: boolean }) {
             </div>
           ))}
         </div>
-      </div>
+      </div> */}
     </div>
   );
 }

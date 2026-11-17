@@ -135,14 +135,14 @@ export function WorksSection({
         if (plate) {
           gsap.fromTo(
             plate,
-            { clipPath: 'inset(0 0 100% 0)' },
+            { scale: 0.96 },
             {
-              clipPath: 'inset(0 0 0% 0)',
-              duration: 0.78,
+              scale: 1,
+              duration: 0.72,
               ease: 'power3.out',
               scrollTrigger: {
                 trigger: article,
-                start: 'top 82%',
+                start: 'top 90%',
                 once: true,
               },
             }
@@ -152,16 +152,15 @@ export function WorksSection({
         if (metaItems.length > 0) {
           gsap.fromTo(
             metaItems,
-            { opacity: 0, y: 14 },
+            { y: 14 },
             {
-              opacity: 1,
               y: 0,
               duration: 0.48,
               stagger: 0.05,
               ease: 'power3.out',
               scrollTrigger: {
                 trigger: article,
-                start: 'top 82%',
+                start: 'top 92%',
                 once: true,
               },
             }

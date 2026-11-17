@@ -92,15 +92,16 @@
 }
 
 .fw-cursor {
-  --cursor-color: #161614;
+  --cursor-color: #ffffff;
   --cursor-label-color: #FAF9F6;
   --ring-s: 1;
   --dot-s: 1;
   --press: 1;
   position: fixed;
   inset: 0;
-  z-index: 70;
+  z-index: 90;
   pointer-events: none;
+  mix-blend-mode: difference;
   opacity: 0;
   transition: opacity 200ms var(--ease-out);
 }
@@ -121,6 +122,7 @@
 .fw-cursor:is([data-state="view"], [data-state="drag"], [data-state="label"]) {
   --ring-s: 2.55;
   --dot-s: 0;
+  mix-blend-mode: normal;
 }
 
 .fw-cursor[data-pressed] {

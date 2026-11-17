@@ -88,7 +88,8 @@ const STUDIES: ArchiveStudy[] = [
 export function ArchiveStrip({ reducedMotion }: { reducedMotion: boolean }) {
   const outerRef = useRef<HTMLElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
-  const [progressPct, setProgressPct] = useState(0);
+  const progressTextRef = useRef<HTMLSpanElement>(null);
+  const progressBarRef = useRef<HTMLDivElement>(null);
   const [activeStudyId, setActiveStudyId] = useState<string>(STUDIES[0].id);
 
   useEffect(() => {
@@ -97,7 +98,8 @@ export function ArchiveStrip({ reducedMotion }: { reducedMotion: boolean }) {
     const mm = gsap.matchMedia();
     mm.add('(min-width: 768px)', () => {
       const el = trackRef.current!;
-      const distance = () => Math.max(0, el.scrollWidth - window.innerWidth + 64);
+      const distance = () =>
+        Math.max(0, el.scrollWidth - window.innerWidth + 64);
 
       const scrollTween = gsap.to(el, {
         x: () => -distance(),
@@ -109,12 +111,16 @@ export function ArchiveStrip({ reducedMotion }: { reducedMotion: boolean }) {
           scrub: true,
           invalidateOnRefresh: true,
           onUpdate: (self) => {
-            setProgressPct(Math.round(self.progress * 100));
-            const idx = Math.min(
-              STUDIES.length - 1,
-              Math.floor(self.progress * STUDIES.length)
-            );
-            setActiveStudyId(STUDIES[idx].id);
+            const pct = Math.round(self.progress * 100);
+            if (progressTextRef.current) {
+              progressTextRef.current.textContent = `${String(pct).padStart(
+                3,
+                '0'
+              )}% TRAVERSED`;
+            }
+            if (progressBarRef.current) {
+              progressBarRef.current.style.width = `${pct}%`;
+            }
           },
         },
       });
@@ -149,8 +155,8 @@ export function ArchiveStrip({ reducedMotion }: { reducedMotion: boolean }) {
       id="archive"
       ref={outerRef}
       aria-label="Material & Proportion Studies"
-      className={`relative border-t border-[var(--border-hairline)] bg-[var(--bg-canvas)] ${
-        reducedMotion ? 'py-16' : 'py-16 md:min-h-[250svh] md:py-0'
+      className={`relative overflow-x-clip border-t border-[var(--border-hairline)] bg-[var(--bg-canvas)] ${
+        reducedMotion ? 'py-16' : 'py-16 md:min-h-[240svh] md:py-0'
       }`}
     >
       <div
@@ -177,8 +183,11 @@ export function ArchiveStrip({ reducedMotion }: { reducedMotion: boolean }) {
             <span className="type-meta text-[var(--ink-secondary)]">
               TRAVERSE REEL — 06 PLATES
             </span>
-            <span className="type-meta rounded-[2px] border border-[var(--border-hairline-strong)] bg-[var(--bg-surface)] px-3 py-1 text-[var(--accent-vermilion)]">
-              {String(progressPct).padStart(3, '0')}% TRAVERSED
+            <span
+              ref={progressTextRef}
+              className="type-meta rounded-[2px] border border-[var(--border-hairline-strong)] bg-[var(--bg-surface)] px-3 py-1 text-[var(--accent-vermilion)]"
+            >
+              {reducedMotion ? 'STATIC REEL' : '000% TRAVERSED'}
             </span>
           </div>
         </div>
@@ -186,7 +195,11 @@ export function ArchiveStrip({ reducedMotion }: { reducedMotion: boolean }) {
         {/* Horizontal Track */}
         <div
           ref={trackRef}
-          className="flex snap-x snap-mandatory gap-6 overflow-x-auto px-[var(--rail-padding)] pb-4 md:w-max md:snap-none md:overflow-visible md:pb-0"
+          className={`flex snap-x snap-mandatory gap-6 overflow-x-auto px-[var(--rail-padding)] pb-4 ${
+            reducedMotion
+              ? ''
+              : 'md:w-max md:snap-none md:overflow-visible md:pb-0'
+          }`}
         >
           {STUDIES.map((study) => {
             const isHighlighted = activeStudyId === study.id;
@@ -250,19 +263,13 @@ export function ArchiveStrip({ reducedMotion }: { reducedMotion: boolean }) {
         <div className="fw-container mt-8 hidden md:block">
           <div className="relative h-6 w-full border-t border-[var(--border-hairline-strong)] pt-2">
             <div
-              style={{ width: `${progressPct}%` }}
-              className="absolute top-[-1.5px] left-0 h-[3px] bg-[var(--accent-vermilion)] transition-[width] duration-75"
+              ref={progressBarRef}
+              style={{ width: reducedMotion ? '100%' : '0%' }}
+              className="absolute top-[-1.5px] left-0 h-[3px] bg-[var(--accent-vermilion)]"
             />
             <div className="flex justify-between text-[var(--ink-secondary)]">
               {STUDIES.map((s) => (
-                <span
-                  key={s.id}
-                  className={`type-meta transition-colors ${
-                    activeStudyId === s.id
-                      ? 'font-medium text-[var(--accent-vermilion)]'
-                      : ''
-                  }`}
-                >
+                <span key={s.id} className="type-meta">
                   {s.index} — {s.ratio}
                 </span>
               ))}

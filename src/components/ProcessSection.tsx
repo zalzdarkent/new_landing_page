@@ -10,7 +10,7 @@ export function ProcessSection({ reducedMotion }: { reducedMotion: boolean }) {
   const [activeIndex, setActiveIndex] = useState(0);
 
   useEffect(() => {
-    if (!rootRef.current) return;
+    if (reducedMotion || !rootRef.current) return;
 
     const ctx = gsap.context(() => {
       const steps = gsap.utils.toArray<HTMLElement>('.process-step');

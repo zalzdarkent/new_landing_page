@@ -39,11 +39,16 @@ export function SpatialApertureSection({
   const trackRef = useRef<HTMLElement>(null);
   const frameRef = useRef<HTMLDivElement>(null);
   const imgRef = useRef<HTMLImageElement>(null);
-  const [aperturePct, setAperturePct] = useState(reducedMotion ? 100 : 24);
+  const aperturePctRef = useRef<HTMLElement>(null);
   const [solarIdx, setSolarIdx] = useState(1);
 
   useEffect(() => {
-    if (reducedMotion || !trackRef.current || !frameRef.current || !imgRef.current)
+    if (
+      reducedMotion ||
+      !trackRef.current ||
+      !frameRef.current ||
+      !imgRef.current
+    )
       return;
 
     const mm = gsap.matchMedia();
@@ -66,11 +71,11 @@ export function SpatialApertureSection({
             end: 'bottom bottom',
             scrub: true,
             onUpdate: (self) => {
-              const p = self.progress;
-              setAperturePct(Math.round(24 + p * 76));
-              if (p < 0.33) setSolarIdx(0);
-              else if (p < 0.72) setSolarIdx(1);
-              else setSolarIdx(2);
+              if (aperturePctRef.current) {
+                aperturePctRef.current.textContent = `${Math.round(
+                  24 + self.progress * 76
+                )}%`;
+              }
             },
           },
         });
@@ -95,7 +100,7 @@ export function SpatialApertureSection({
       ref={trackRef}
       aria-label="Kurokawa Spatial Daylight Study"
       className={`relative border-b border-[var(--border-hairline)] bg-[var(--bg-darkroom)] text-[var(--ink-on-dark)] ${
-        reducedMotion ? 'py-20' : 'min-h-[210svh]'
+        reducedMotion ? 'py-20' : 'min-h-[190svh]'
       }`}
     >
       <div
@@ -117,7 +122,13 @@ export function SpatialApertureSection({
 
             <div className="flex flex-wrap items-center gap-4">
               <span className="type-meta text-[var(--ink-on-dark-muted)]">
-                APERTURE OPEN: <strong className="text-[var(--ink-on-dark)]">{aperturePct}%</strong>
+                APERTURE OPEN:{' '}
+                <strong
+                  ref={aperturePctRef}
+                  className="text-[var(--ink-on-dark)]"
+                >
+                  {reducedMotion ? '100%' : '24%'}
+                </strong>
               </span>
               <span className="type-meta text-[var(--accent-vermilion)]">
                 {activeSolar.lux} // {activeSolar.angle}
@@ -143,13 +154,11 @@ export function SpatialApertureSection({
             className="h-full w-full object-cover transition-[filter] duration-500 will-change-transform"
           />
 
-          {/* Subtle Dark-Room Gradient Vignette for Readability */}
           <div
             aria-hidden="true"
             className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#161614]/85 via-[#161614]/25 to-[#161614]/65"
           />
 
-          {/* Orthographic Crosshair & Bay Ratio Overlay inside the Aperture */}
           <svg
             viewBox="0 0 1200 700"
             aria-hidden="true"
@@ -189,7 +198,8 @@ export function SpatialApertureSection({
           <div className="fw-grid items-end gap-y-6 border-t border-[var(--border-hairline-dark)] pt-5">
             <div className="col-span-4 md:col-span-5 lg:col-span-7">
               <span className="type-meta mb-2 block text-[var(--accent-vermilion)]">
-                SOLAR SYNCHRONIZATION // {activeSolar.time} — {activeSolar.label}
+                SOLAR SYNCHRONIZATION // {activeSolar.time} —{' '}
+                {activeSolar.label}
               </span>
               <h2 className="type-h2 max-w-[28ch] text-[var(--ink-on-dark)]">
                 Light is treated as a{' '}
@@ -237,4 +247,3 @@ export function SpatialApertureSection({
     </section>
   );
 }
-

@@ -59,11 +59,11 @@ export function DarkRoomSpecimen({ reducedMotion }: DarkRoomSpecimenProps) {
   const sectionRef = useRef<HTMLElement>(null);
   const stageRef = useRef<HTMLDivElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
+  const scrubTextRef = useRef<HTMLSpanElement>(null);
   const [activeMode, setActiveMode] = useState<MotionModeKey>('spring');
   const [stiffness, setStiffness] = useState(180);
   const [damping, setDamping] = useState(18);
   const [triggerCount, setTriggerCount] = useState(0);
-  const [scrubProgress, setScrubProgress] = useState(0);
   const [travelDistance, setTravelDistance] = useState(200);
   const [stageTilt, setStageTilt] = useState({ x: 0, y: 0 });
 
@@ -132,7 +132,11 @@ export function DarkRoomSpecimen({ reducedMotion }: DarkRoomSpecimenProps) {
             end: 'bottom 35%',
             scrub: 0.6,
             onUpdate: (self) => {
-              setScrubProgress(Number(self.progress.toFixed(2)));
+              if (scrubTextRef.current) {
+                scrubTextRef.current.textContent = `SCRUB ${self.progress.toFixed(
+                  2
+                )}`;
+              }
             },
           },
         });
@@ -338,7 +342,9 @@ export function DarkRoomSpecimen({ reducedMotion }: DarkRoomSpecimenProps) {
               <div className="space-y-2 pt-1">
                 <div className="flex items-center justify-between text-[var(--ink-on-dark-muted)]">
                   <span className="type-meta">LIVE IMPULSE SHUTTLE</span>
-                  <span className="type-meta">SCRUB {scrubProgress.toFixed(2)}</span>
+                  <span ref={scrubTextRef} className="type-meta">
+                    SCRUB 0.00
+                  </span>
                 </div>
                 <div
                   ref={trackRef}

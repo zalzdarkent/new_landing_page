@@ -35,7 +35,7 @@ const THESIS_PILLARS = [
 export function BigIdeaSection({ reducedMotion }: { reducedMotion: boolean }) {
   const rootRef = useRef<HTMLElement>(null);
   const spiralPathRef = useRef<SVGPathElement>(null);
-  const [readProgress, setReadProgress] = useState(0);
+  const readProgressRef = useRef<HTMLSpanElement>(null);
   const [activePillar, setActivePillar] = useState(0);
 
   useEffect(() => {
@@ -52,7 +52,7 @@ export function BigIdeaSection({ reducedMotion }: { reducedMotion: boolean }) {
         onSplit(self) {
           return gsap.fromTo(
             self.words,
-            { opacity: 0.14 },
+            { opacity: 0.16 },
             {
               opacity: 1,
               ease: 'none',
@@ -64,7 +64,11 @@ export function BigIdeaSection({ reducedMotion }: { reducedMotion: boolean }) {
                 end: 'bottom 42%',
                 scrub: true,
                 onUpdate: (st) => {
-                  setReadProgress(Math.round(st.progress * 100));
+                  if (readProgressRef.current) {
+                    readProgressRef.current.textContent = `${Math.round(
+                      st.progress * 100
+                    )}% ILLUMINATED`;
+                  }
                 },
               },
             }
@@ -118,8 +122,11 @@ export function BigIdeaSection({ reducedMotion }: { reducedMotion: boolean }) {
                 <span className="type-meta text-[var(--ink-secondary)]">
                   FIG. 02 — FIBONACCI BAY
                 </span>
-                <span className="type-meta text-[var(--accent-vermilion)]">
-                  {reducedMotion ? '100%' : `${readProgress}%`} ILLUMINATED
+                <span
+                  ref={readProgressRef}
+                  className="type-meta text-[var(--accent-vermilion)]"
+                >
+                  {reducedMotion ? '100% ILLUMINATED' : '0% ILLUMINATED'}
                 </span>
               </div>
 
@@ -128,7 +135,6 @@ export function BigIdeaSection({ reducedMotion }: { reducedMotion: boolean }) {
                 className="w-full"
                 aria-hidden="true"
               >
-                {/* Golden rectangles */}
                 <rect
                   x="10"
                   y="10"
@@ -162,7 +168,6 @@ export function BigIdeaSection({ reducedMotion }: { reducedMotion: boolean }) {
                   stroke="rgba(22,22,20,0.16)"
                   strokeWidth="1"
                 />
-                {/* Scrubbed Golden Spiral Path */}
                 <path
                   ref={spiralPathRef}
                   d="M 10 150 A 140 140 0 0 1 158 10 A 86 86 0 0 1 250 96 A 54 54 0 0 1 194 150 A 36 36 0 0 1 158 114"
