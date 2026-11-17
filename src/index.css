@@ -1,0 +1,317 @@
+@import "tailwindcss";
+
+:root {
+  /* Surface & Canvas */
+  --bg-canvas: #F2F0EC;
+  --bg-surface: #FAF9F6;
+  --bg-darkroom: #161614;
+  --bg-darkroom-elevated: #1F1F1C;
+
+  /* Ink Hierarchy */
+  --ink-primary: #161614;
+  --ink-secondary: #63615C;
+  --ink-on-dark: #F2F0EC;
+  --ink-on-dark-muted: #9A9790;
+
+  /* Accent & Structural Borders */
+  --accent-vermilion: #D9381E;
+  --accent-vermilion-hover: #BF2E16;
+  --border-hairline: rgba(22, 22, 20, 0.12);
+  --border-hairline-dark: rgba(242, 240, 236, 0.14);
+
+  /* Typography */
+  --font-display: 'Cabinet Grotesk', system-ui, -apple-system, sans-serif;
+  --font-serif: 'Instrument Serif', Georgia, serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, monospace;
+
+  /* Emil Kowalski Custom Easing Curves */
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+
+  /* Atmosphere */
+  --grain-opacity: 0.032;
+
+  /* Layout Rails */
+  --rail-padding: clamp(1.25rem, 4vw, 4rem);
+  --container-max: 90rem; /* 1440px */
+}
+
+@layer base {
+  html {
+    background-color: var(--bg-canvas);
+    color: var(--ink-primary);
+    font-family: var(--font-display);
+    font-size: 16px;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    scroll-behavior: auto;
+  }
+
+  body {
+    margin: 0;
+    background-color: var(--bg-canvas);
+    color: var(--ink-primary);
+    overflow-x: hidden;
+  }
+
+  ::selection {
+    background-color: var(--accent-vermilion);
+    color: var(--bg-surface);
+  }
+}
+
+/* Subtle Architectural Paper Grain (frontend-atlas backgrounds-svg-canvas.md#3) */
+.fw-grain::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  pointer-events: none;
+  opacity: var(--grain-opacity);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='256' height='256'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 256px 256px;
+}
+
+/* Context-Aware Custom Cursor (frontend-atlas interactions.md#1) */
+@media (hover: hover) and (pointer: fine) {
+  html.has-custom-cursor,
+  html.has-custom-cursor :where(a, button, [role="button"], summary, label, select, [data-cursor]) {
+    cursor: none;
+  }
+  html.has-custom-cursor :where(input, textarea, [contenteditable="true"]) {
+    cursor: text;
+  }
+}
+
+.fw-cursor {
+  --cursor-color: #161614;
+  --cursor-label-color: #FAF9F6;
+  --ring-s: 1;
+  --dot-s: 1;
+  --press: 1;
+  position: fixed;
+  inset: 0;
+  z-index: 70;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 200ms var(--ease-out);
+}
+
+.fw-cursor[data-visible="true"] {
+  opacity: 1;
+}
+
+.fw-cursor[data-state="hidden"] {
+  opacity: 0;
+}
+
+.fw-cursor[data-state="link"] {
+  --ring-s: 1.55;
+  --dot-s: 0;
+}
+
+.fw-cursor:is([data-state="view"], [data-state="drag"], [data-state="label"]) {
+  --ring-s: 2.5;
+  --dot-s: 0;
+}
+
+.fw-cursor[data-pressed] {
+  --press: 0.82;
+}
+
+.fw-cursor__pos {
+  position: absolute;
+  top: 0;
+  left: 0;
+  will-change: transform;
+}
+
+.fw-cursor__dot,
+.fw-cursor__ring,
+.fw-cursor__label {
+  position: absolute;
+  translate: -50% -50%;
+}
+
+.fw-cursor__dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--cursor-color);
+  scale: calc(var(--dot-s) * var(--press));
+  transition: scale 180ms var(--ease-out);
+}
+
+.fw-cursor__ring {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: 1px solid var(--cursor-color);
+  scale: calc(var(--ring-s) * var(--press));
+  transition: scale 360ms var(--ease-out), background-color 180ms ease;
+}
+
+.fw-cursor:is([data-state="view"], [data-state="drag"], [data-state="label"]) .fw-cursor__ring {
+  background: var(--accent-vermilion);
+  border-color: var(--accent-vermilion);
+}
+
+.fw-cursor__label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 500;
+  line-height: 1;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--cursor-label-color);
+  white-space: nowrap;
+  opacity: 0;
+  scale: 0.65;
+  transition: opacity 150ms ease, scale 280ms var(--ease-out);
+}
+
+.fw-cursor:is([data-state="view"], [data-state="drag"], [data-state="label"]) .fw-cursor__label {
+  opacity: 1;
+  scale: 1;
+}
+
+/* Architectural Container */
+.fw-container {
+  width: 100%;
+  max-width: var(--container-max);
+  margin-inline: auto;
+  padding-inline: var(--rail-padding);
+}
+
+/* 12-Column Swiss Grid */
+.fw-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+@media (min-width: 768px) {
+  .fw-grid {
+    grid-template-columns: repeat(8, minmax(0, 1fr));
+    gap: 1.25rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .fw-grid {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    gap: clamp(1rem, 2vw, 1.75rem);
+  }
+}
+
+/* Fluid Typography Classes */
+.type-hero {
+  font-family: var(--font-display);
+  font-size: clamp(2.75rem, 6.2vw, 5.75rem);
+  font-weight: 700;
+  line-height: 0.94;
+  letter-spacing: -0.04em;
+}
+
+.type-h1 {
+  font-family: var(--font-display);
+  font-size: clamp(2.25rem, 4.5vw, 4.25rem);
+  font-weight: 700;
+  line-height: 0.98;
+  letter-spacing: -0.035em;
+}
+
+.type-h2 {
+  font-family: var(--font-display);
+  font-size: clamp(1.625rem, 2.8vw, 2.5rem);
+  font-weight: 500;
+  line-height: 1.1;
+  letter-spacing: -0.025em;
+}
+
+.type-h3 {
+  font-family: var(--font-display);
+  font-size: clamp(1.25rem, 1.6vw, 1.5rem);
+  font-weight: 500;
+  line-height: 1.2;
+  letter-spacing: -0.015em;
+}
+
+.type-body-lg {
+  font-family: var(--font-display);
+  font-size: clamp(1.125rem, 1.35vw, 1.375rem);
+  font-weight: 400;
+  line-height: 1.5;
+  letter-spacing: -0.01em;
+}
+
+.type-meta {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 400;
+  line-height: 1.4;
+  letter-spacing: 0.06em;
+  font-variant-numeric: tabular-nums;
+}
+
+.type-serif-accent {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 400;
+  letter-spacing: -0.02em;
+}
+
+/* Tactile Link Underline Draw */
+.fw-link-draw {
+  position: relative;
+  display: inline-block;
+}
+
+.fw-link-draw::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -2px;
+  width: 100%;
+  height: 1px;
+  background-color: currentColor;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 180ms var(--ease-out);
+}
+
+.fw-link-draw:hover::after,
+.fw-link-draw:focus-visible::after {
+  transform: scaleX(1);
+}
+
+/* Tactile Button Press */
+.fw-btn-tactile {
+  transition:
+    background-color 160ms var(--ease-out),
+    border-color 160ms var(--ease-out),
+    color 160ms var(--ease-out),
+    transform 120ms var(--ease-out);
+}
+
+.fw-btn-tactile:active {
+  transform: scale(0.97) translateY(1px);
+}
+
+/* Focus Ring */
+:focus-visible {
+  outline: 2px solid var(--accent-vermilion);
+  outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
