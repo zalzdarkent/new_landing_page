@@ -12,8 +12,10 @@ interface TopRailProps {
 
 const NAV_ITEMS = [
   { id: 'works', index: '01', label: 'Works' },
-  { id: 'specimen', index: '02', label: 'Specimen' },
-  { id: 'practice', index: '03', label: 'Practice' },
+  { id: 'strata', index: '02', label: 'Strata' },
+  { id: 'capabilities', index: '03', label: 'Matrix' },
+  { id: 'specimen', index: '04', label: 'Dark Room' },
+  { id: 'practice', index: '05', label: 'Practice' },
 ];
 
 export function TopRail({
@@ -38,7 +40,10 @@ export function TopRail({
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
-  const isDarkRoom = activeSection === 'specimen';
+  const isDarkRoom =
+    activeSection === 'aperture' ||
+    activeSection === 'specimen' ||
+    activeSection === 'taktil';
 
   return (
     <header
@@ -57,14 +62,23 @@ export function TopRail({
             e.preventDefault();
             onNavigate('hero');
           }}
-          className="text-sm font-bold tracking-[-0.03em] uppercase transition-opacity duration-150 hover:opacity-75"
+          className="flex items-center gap-2.5 text-sm font-bold tracking-[-0.03em] uppercase transition-opacity duration-150 hover:opacity-75"
         >
-          FORMWORK®
+          <span>FORMWORK®</span>
+          <span className="type-meta hidden rounded-[2px] border border-current/25 px-1.5 py-0.5 text-[10px] sm:inline-block">
+            ED. IV
+          </span>
         </a>
 
-        <nav aria-label="Primary chapters" className="hidden items-center gap-8 md:flex">
+        <nav
+          aria-label="Primary chapters"
+          className="hidden items-center gap-7 md:flex"
+        >
           {NAV_ITEMS.map((item) => {
-            const isActive = activeSection === item.id;
+            const isActive =
+              activeSection === item.id ||
+              (item.id === 'specimen' && activeSection === 'taktil') ||
+              (item.id === 'works' && activeSection === 'aperture');
             return (
               <NavScrambleLink
                 key={item.id}
@@ -108,7 +122,7 @@ export function TopRail({
       <motion.div
         aria-hidden="true"
         style={{ scaleX, transformOrigin: '0% 50%' }}
-        className="pointer-events-none absolute bottom-[-1px] left-0 right-0 h-[1px] bg-[var(--accent-vermilion)]/70"
+        className="pointer-events-none absolute bottom-[-1px] left-0 right-0 h-[1.5px] bg-[var(--accent-vermilion)]"
       />
     </header>
   );

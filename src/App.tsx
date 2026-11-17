@@ -9,11 +9,14 @@ import { CustomCursor } from './components/CustomCursor';
 import { HeroSection } from './components/HeroSection';
 import { VelocityTicker } from './components/VelocityTicker';
 import { BigIdeaSection } from './components/BigIdeaSection';
+import { SpatialApertureSection } from './components/SpatialApertureSection';
 import { WorksSection } from './components/WorksSection';
+import { DeconstructedStackSection } from './components/DeconstructedStackSection';
 import { ArchiveStrip } from './components/ArchiveStrip';
 import { CapabilitiesSection } from './components/CapabilitiesSection';
 import { ProcessSection } from './components/ProcessSection';
 import { DarkRoomSpecimen } from './components/DarkRoomSpecimen';
+import { TactileHardwareSection } from './components/TactileHardwareSection';
 import { TypographyLabSection } from './components/TypographyLabSection';
 import { ComparisonSection } from './components/ComparisonSection';
 import { PracticeSection } from './components/PracticeSection';
@@ -97,10 +100,15 @@ export function App() {
   useEffect(() => {
     const ids = [
       'hero',
+      'thesis',
+      'aperture',
       'works',
+      'strata',
+      'archive',
       'capabilities',
       'process',
       'specimen',
+      'taktil',
       'typolab',
       'comparison',
       'practice',
@@ -164,17 +172,21 @@ export function App() {
         <HeroSection
           reducedMotion={reducedMotion}
           onNavigate={scrollToSection}
+          onOpenCommission={() => setCommissionOpen(true)}
         />
         <VelocityTicker reducedMotion={reducedMotion} />
         <BigIdeaSection reducedMotion={reducedMotion} />
+        <SpatialApertureSection reducedMotion={reducedMotion} />
         <WorksSection
           reducedMotion={reducedMotion}
           onDrawerChange={setWorkDrawerOpen}
         />
+        <DeconstructedStackSection reducedMotion={reducedMotion} />
         <ArchiveStrip reducedMotion={reducedMotion} />
         <CapabilitiesSection reducedMotion={reducedMotion} />
         <ProcessSection reducedMotion={reducedMotion} />
         <DarkRoomSpecimen reducedMotion={reducedMotion} />
+        <TactileHardwareSection reducedMotion={reducedMotion} />
         <TypographyLabSection reducedMotion={reducedMotion} />
         <ComparisonSection />
         <PracticeSection reducedMotion={reducedMotion} />

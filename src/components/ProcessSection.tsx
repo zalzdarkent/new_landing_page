@@ -17,8 +17,8 @@ export function ProcessSection({ reducedMotion }: { reducedMotion: boolean }) {
       steps.forEach((step, idx) => {
         ScrollTrigger.create({
           trigger: step,
-          start: 'top center',
-          end: 'bottom center',
+          start: 'top 55%',
+          end: 'bottom 45%',
           onToggle: (self) => {
             if (self.isActive) setActiveIndex(idx);
           },
@@ -41,15 +41,16 @@ export function ProcessSection({ reducedMotion }: { reducedMotion: boolean }) {
         <div className="fw-grid mb-12 items-end border-b border-[var(--border-hairline)] pb-6">
           <div className="col-span-4 md:col-span-5 lg:col-span-7">
             <span className="type-meta mb-3 block text-[var(--ink-secondary)]">
-              05 / METHODOLOGY
+              08 / ARCHITECTURAL CADENCE
             </span>
             <h2 className="type-h1 text-[var(--ink-primary)]">
-              From Excavation to Calibration
+              From Excavation to{' '}
+              <span className="type-serif-accent font-normal">Calibration</span>
             </h2>
           </div>
           <div className="col-span-4 md:col-span-3 lg:col-span-5 lg:text-right">
             <span className="type-meta text-[var(--ink-secondary)]">
-              SEVEN-WEEK ARCHITECTURAL CADENCE
+              FIVE-STAGE CASTING PROTOCOL // 07 WEEKS
             </span>
           </div>
         </div>
@@ -62,52 +63,83 @@ export function ProcessSection({ reducedMotion }: { reducedMotion: boolean }) {
               return (
                 <article
                   key={phase.index}
-                  className={`process-step flex min-h-[42vh] flex-col justify-center border-b border-[var(--border-hairline)] py-10 transition-opacity duration-300 ease-[var(--ease-out)] last:border-b-0 ${
-                    isActive ? 'opacity-100' : 'opacity-40'
+                  onClick={() => setActiveIndex(idx)}
+                  className={`process-step group cursor-pointer border-b border-[var(--border-hairline)] py-10 transition-all duration-300 ease-[var(--ease-out)] last:border-b-0 ${
+                    isActive ? 'opacity-100' : 'opacity-45 hover:opacity-80'
                   }`}
                 >
-                  <div className="mb-3 flex items-center gap-4">
-                    <span className="type-meta text-[var(--accent-vermilion)]">
-                      PHASE {phase.index}
-                    </span>
-                    <span className="type-meta text-[var(--ink-secondary)]">
-                      {phase.duration}
+                  <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
+                    <div className="flex items-center gap-3">
+                      <span className="type-meta text-[var(--accent-vermilion)]">
+                        {phase.code}
+                      </span>
+                      <span className="type-meta rounded-[2px] border border-[var(--border-hairline)] bg-[var(--bg-surface)] px-2 py-0.5 text-[var(--ink-secondary)]">
+                        {phase.duration}
+                      </span>
+                    </div>
+                    <span className="type-meta text-[var(--ink-primary)]">
+                      {phase.gateMetric}
                     </span>
                   </div>
-                  <h3 className="type-h2 mb-4 text-[var(--ink-primary)]">
+
+                  <h3 className="type-h2 mb-3 text-[var(--ink-primary)]">
                     {phase.title}
                   </h3>
-                  <p className="mb-5 max-w-[46ch] text-base leading-relaxed text-[var(--ink-secondary)]">
+                  <p className="mb-3 max-w-[48ch] text-base leading-relaxed text-[var(--ink-primary)]">
                     {phase.summary}
                   </p>
-                  <span className="type-meta inline-block w-fit rounded-[2px] border border-[var(--border-hairline)] bg-[var(--bg-surface)] px-3 py-1 text-[var(--ink-primary)]">
-                    ARTIFACT: {phase.artifact}
-                  </span>
+                  <p className="mb-5 max-w-[48ch] text-sm leading-relaxed text-[var(--ink-secondary)]">
+                    {phase.engineeringDetail}
+                  </p>
+
+                  <div className="flex flex-wrap items-center gap-3">
+                    <span className="type-meta inline-block rounded-[2px] border border-[var(--border-hairline-strong)] bg-[var(--bg-surface)] px-3 py-1 text-[var(--ink-primary)]">
+                      DELIVERABLE: {phase.artifact}
+                    </span>
+                  </div>
                 </article>
               );
             })}
           </div>
 
-          {/* Right Sticky Architectural Blueprint: Cols 7-12 */}
-          <div className="col-span-4 hidden md:sticky md:top-24 md:col-span-4 md:block lg:col-span-6 lg:pl-8">
-            <div className="flex aspect-[4/3] flex-col justify-between rounded-[2px] border border-[var(--border-hairline)] bg-[var(--bg-surface)] p-8">
+          {/* Right Sticky Architectural Signal-Beam Blueprint: Cols 7-12 */}
+          <div className="col-span-4 md:sticky md:top-24 md:col-span-4 lg:col-span-6 lg:pl-8">
+            <div className="flex flex-col justify-between rounded-[2px] border border-[var(--border-hairline-strong)] bg-[var(--bg-surface)] p-6 sm:p-8">
               <div className="flex items-center justify-between border-b border-[var(--border-hairline)] pb-4">
                 <span className="type-meta text-[var(--ink-secondary)]">
-                  BLUEPRINT STATE — {activePhase.index} / 04
+                  ORTHOGRAPHIC TELEMETRY — {activePhase.index} / 0{PROCESS_PHASES.length}
                 </span>
                 <span className="type-meta text-[var(--accent-vermilion)]">
-                  {activePhase.title.toUpperCase()}
+                  {activePhase.duration}
                 </span>
               </div>
 
-              {/* Morphing Geometric SVG Diagram */}
-              <div className="flex flex-1 items-center justify-center py-6">
+              {/* Quick Phase Selector Bar */}
+              <div className="mt-4 grid grid-cols-5 gap-1.5">
+                {PROCESS_PHASES.map((p, idx) => (
+                  <button
+                    key={p.index}
+                    type="button"
+                    onClick={() => setActiveIndex(idx)}
+                    className={`type-meta min-h-[34px] rounded-[2px] border transition-colors ${
+                      idx === activeIndex
+                        ? 'border-[var(--accent-vermilion)] bg-[var(--accent-vermilion)] text-[#FAF9F6]'
+                        : 'border-[var(--border-hairline)] bg-[var(--bg-canvas)] text-[var(--ink-secondary)] hover:text-[var(--ink-primary)]'
+                    }`}
+                  >
+                    {p.index}
+                  </button>
+                ))}
+              </div>
+
+              {/* Morphing Geometric SVG Diagram with Traveling Signal Beams */}
+              <div className="my-6 flex items-center justify-center rounded-[2px] border border-[var(--border-hairline)] bg-[var(--bg-canvas)] p-4">
                 <svg
                   viewBox="0 0 320 220"
-                  className="h-full max-h-[240px] w-full"
+                  className="h-full max-h-[250px] w-full"
                   aria-hidden="true"
                 >
-                  {/* Base 4-quadrant structural grid */}
+                  {/* Base structural grid */}
                   <rect
                     x="20"
                     y="20"
@@ -122,56 +154,95 @@ export function ProcessSection({ reducedMotion }: { reducedMotion: boolean }) {
                     y1="20"
                     x2="160"
                     y2="200"
-                    stroke="rgba(22,22,20,0.12)"
+                    stroke="rgba(22,22,20,0.1)"
                     strokeWidth="1"
+                    strokeDasharray="3 3"
                   />
                   <line
                     x1="20"
                     y1="110"
                     x2="300"
                     y2="110"
-                    stroke="rgba(22,22,20,0.12)"
+                    stroke="rgba(22,22,20,0.1)"
                     strokeWidth="1"
+                    strokeDasharray="3 3"
                   />
 
-                  {/* Phase-driven geometric highlight */}
-                  <rect
-                    x={20 + (activeIndex % 2) * 140}
-                    y={20 + Math.floor(activeIndex / 2) * 90}
-                    width="140"
-                    height="90"
+                  {/* Signal Path Connecting All 5 Phase Nodes */}
+                  <path
+                    d="M 75 65 L 160 65 L 245 110 L 160 155 L 95 155 Z"
+                    fill="none"
+                    stroke="rgba(22,22,20,0.18)"
+                    strokeWidth="1.2"
+                  />
+                  {!reducedMotion && (
+                    <path
+                      d="M 75 65 L 160 65 L 245 110 L 160 155 L 95 155 Z"
+                      fill="none"
+                      stroke="#D9381E"
+                      strokeWidth="1.8"
+                      className="fw-beam-comet"
+                    />
+                  )}
+
+                  {/* Morphing Golden-Ratio Target Circle */}
+                  <circle
+                    cx={activePhase.coordinates.x}
+                    cy={activePhase.coordinates.y}
+                    r={activePhase.coordinates.r}
                     fill="rgba(217,56,30,0.08)"
                     stroke="#D9381E"
-                    strokeWidth="1.5"
-                    style={{
-                      transition: reducedMotion
-                        ? 'none'
-                        : 'all 360ms cubic-bezier(0.23, 1, 0.32, 1)',
-                    }}
-                  />
-
-                  {/* Golden-ratio circle */}
-                  <circle
-                    cx={90 + activeIndex * 46}
-                    cy={110}
-                    r={32 + activeIndex * 8}
-                    fill="none"
-                    stroke="#161614"
-                    strokeWidth="1.2"
+                    strokeWidth="1.4"
                     style={{
                       transition: reducedMotion
                         ? 'none'
                         : 'all 420ms cubic-bezier(0.23, 1, 0.32, 1)',
                     }}
                   />
+
+                  {/* 5 Phase Nodes */}
+                  {PROCESS_PHASES.map((p, idx) => {
+                    const isNodeActive = idx === activeIndex;
+                    return (
+                      <g key={p.index}>
+                        <circle
+                          cx={p.coordinates.x}
+                          cy={p.coordinates.y}
+                          r={isNodeActive ? 6 : 4}
+                          fill={isNodeActive ? '#D9381E' : '#161614'}
+                        />
+                        <text
+                          x={p.coordinates.x + 9}
+                          y={p.coordinates.y + 4}
+                          fontSize="9"
+                          fontFamily="monospace"
+                          fill={isNodeActive ? '#D9381E' : '#63615C'}
+                        >
+                          P{p.index}
+                        </text>
+                      </g>
+                    );
+                  })}
                 </svg>
               </div>
 
-              <div className="flex items-center justify-between border-t border-[var(--border-hairline)] pt-4 text-[var(--ink-secondary)]">
-                <span className="type-meta">DELIVERABLE</span>
-                <span className="type-meta text-[var(--ink-primary)]">
-                  {activePhase.artifact}
-                </span>
+              <div className="space-y-2 border-t border-[var(--border-hairline)] pt-4">
+                <div className="flex items-center justify-between">
+                  <span className="type-meta text-[var(--ink-secondary)]">
+                    ACTIVE PHASE
+                  </span>
+                  <span className="type-meta font-medium text-[var(--ink-primary)]">
+                    {activePhase.title.toUpperCase()}
+                  </span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="type-meta text-[var(--ink-secondary)]">
+                    VERIFICATION GATE
+                  </span>
+                  <span className="type-meta text-[var(--accent-vermilion)]">
+                    {activePhase.gateMetric}
+                  </span>
+                </div>
               </div>
             </div>
           </div>
@@ -180,4 +251,3 @@ export function ProcessSection({ reducedMotion }: { reducedMotion: boolean }) {
     </section>
   );
 }
-

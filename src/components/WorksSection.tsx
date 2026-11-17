@@ -11,9 +11,106 @@ interface WorksSectionProps {
   onDrawerChange?: (open: boolean) => void;
 }
 
-export function WorksSection({ reducedMotion, onDrawerChange }: WorksSectionProps) {
+function BlueprintOverlay({
+  work,
+  forceFull,
+}: {
+  work: ExhibitionWork;
+  forceFull: boolean;
+}) {
+  return (
+    <div
+      aria-hidden="true"
+      style={
+        forceFull
+          ? { WebkitMaskImage: 'none', maskImage: 'none' }
+          : undefined
+      }
+      className={`fw-xray-layer pointer-events-none absolute inset-0 flex flex-col justify-between bg-[#161614]/92 p-5 text-[#F2F0EC] ${
+        forceFull ? 'opacity-100' : 'opacity-0 group-hover/plate:opacity-100'
+      }`}
+    >
+      {/* Top Blueprint Header */}
+      <div className="flex items-center justify-between border-b border-[var(--border-hairline-dark)] pb-2.5">
+        <span className="type-meta text-[var(--accent-vermilion)]">
+          X-RAY ORTHOGRAPHIC // {work.code}
+        </span>
+        <span className="type-meta text-[#9A9790]">{work.dimensions}</span>
+      </div>
+
+      {/* Center Structural Wireframe SVG */}
+      <div className="relative my-auto flex items-center justify-center py-4">
+        <svg viewBox="0 0 600 280" className="w-full max-w-[520px] opacity-85">
+          <rect
+            x="24"
+            y="20"
+            width="552"
+            height="240"
+            fill="none"
+            stroke="rgba(242,240,236,0.28)"
+            strokeWidth="1"
+            strokeDasharray="4 4"
+          />
+          <line
+            x1="365"
+            y1="20"
+            x2="365"
+            y2="260"
+            stroke="#D9381E"
+            strokeWidth="1.2"
+          />
+          <line
+            x1="24"
+            y1="140"
+            x2="576"
+            y2="140"
+            stroke="rgba(242,240,236,0.22)"
+            strokeWidth="1"
+          />
+          <circle
+            cx="365"
+            cy="140"
+            r="78"
+            fill="none"
+            stroke="#F2F0EC"
+            strokeWidth="1"
+          />
+          <circle
+            cx="200"
+            cy="140"
+            r="48"
+            fill="none"
+            stroke="#D9381E"
+            strokeWidth="1"
+            strokeDasharray="3 3"
+          />
+          <path
+            d="M 24 260 L 365 20 L 576 260"
+            fill="none"
+            stroke="rgba(242,240,236,0.2)"
+            strokeWidth="1"
+          />
+        </svg>
+      </div>
+
+      {/* Bottom Blueprint Telemetry */}
+      <div className="flex items-center justify-between border-t border-[var(--border-hairline-dark)] pt-2.5">
+        <span className="type-meta text-[#F2F0EC]">{work.blueprintNote}</span>
+        <span className="type-meta text-[var(--accent-vermilion)]">
+          CLICK TO OPEN DOSSIER →
+        </span>
+      </div>
+    </div>
+  );
+}
+
+export function WorksSection({
+  reducedMotion,
+  onDrawerChange,
+}: WorksSectionProps) {
   const sectionRef = useRef<HTMLElement>(null);
   const [selectedWork, setSelectedWork] = useState<ExhibitionWork | null>(null);
+  const [xrayLocked, setXrayLocked] = useState(false);
 
   useEffect(() => {
     onDrawerChange?.(selectedWork !== null);
@@ -25,9 +122,15 @@ export function WorksSection({ reducedMotion, onDrawerChange }: WorksSectionProp
     const ctx = gsap.context(() => {
       const articles = gsap.utils.toArray<HTMLElement>('.exhibition-article');
       articles.forEach((article) => {
-        const plate = article.querySelector<HTMLElement>('.exhibition-plate-frame');
-        const parallax = article.querySelector<HTMLElement>('.exhibition-plate-parallax');
-        const metaItems = article.querySelectorAll<HTMLElement>('.exhibition-meta-reveal');
+        const plate = article.querySelector<HTMLElement>(
+          '.exhibition-plate-frame'
+        );
+        const parallax = article.querySelector<HTMLElement>(
+          '.exhibition-plate-parallax'
+        );
+        const metaItems = article.querySelectorAll<HTMLElement>(
+          '.exhibition-meta-reveal'
+        );
 
         if (plate) {
           gsap.fromTo(
@@ -35,11 +138,11 @@ export function WorksSection({ reducedMotion, onDrawerChange }: WorksSectionProp
             { clipPath: 'inset(0 0 100% 0)' },
             {
               clipPath: 'inset(0 0 0% 0)',
-              duration: 0.72,
+              duration: 0.78,
               ease: 'power3.out',
               scrollTrigger: {
                 trigger: article,
-                start: 'top 80%',
+                start: 'top 82%',
                 once: true,
               },
             }
@@ -49,29 +152,28 @@ export function WorksSection({ reducedMotion, onDrawerChange }: WorksSectionProp
         if (metaItems.length > 0) {
           gsap.fromTo(
             metaItems,
-            { opacity: 0, y: 12 },
+            { opacity: 0, y: 14 },
             {
               opacity: 1,
               y: 0,
-              duration: 0.45,
-              stagger: 0.045,
+              duration: 0.48,
+              stagger: 0.05,
               ease: 'power3.out',
               scrollTrigger: {
                 trigger: article,
-                start: 'top 80%',
+                start: 'top 82%',
                 once: true,
               },
             }
           );
         }
 
-        // Parallax runs on the outer wrapper so CSS hover scale on <img> never conflicts
         if (parallax && window.innerWidth >= 1024) {
           gsap.fromTo(
             parallax,
-            { yPercent: -3.5 },
+            { yPercent: -4 },
             {
-              yPercent: 3.5,
+              yPercent: 4,
               ease: 'none',
               scrollTrigger: {
                 trigger: article,
@@ -97,6 +199,15 @@ export function WorksSection({ reducedMotion, onDrawerChange }: WorksSectionProp
     return () => window.removeEventListener('keydown', onKeyDown);
   }, [selectedWork]);
 
+  const handlePlatePointerMove = (e: React.PointerEvent<HTMLButtonElement>) => {
+    const xray = e.currentTarget.querySelector<HTMLElement>('.fw-xray-layer');
+    if (!xray) return;
+    const rect = e.currentTarget.getBoundingClientRect();
+    xray.style.setProperty('--mx', `${e.clientX - rect.left}px`);
+    xray.style.setProperty('--my', `${e.clientY - rect.top}px`);
+    xray.style.setProperty('--mr', '220px');
+  };
+
   return (
     <section
       id="works"
@@ -104,20 +215,36 @@ export function WorksSection({ reducedMotion, onDrawerChange }: WorksSectionProp
       className="py-[clamp(4.5rem,9vw,8.5rem)]"
     >
       <div className="fw-container">
-        {/* Chapter Header */}
+        {/* Chapter Header + Interactive X-Ray Blueprint Toggle */}
         <div className="fw-grid mb-14 items-end border-b border-[var(--border-hairline)] pb-6 lg:mb-20">
-          <div className="col-span-4 md:col-span-4 lg:col-span-6">
+          <div className="col-span-4 md:col-span-5 lg:col-span-7">
             <span className="type-meta mb-3 block text-[var(--ink-secondary)]">
-              02 / SELECTED ARTIFACTS
+              04 / EXHIBITION MONOGRAPHS
             </span>
             <h2 className="type-h1 text-[var(--ink-primary)]">
-              Exhibition Plates
+              Selected{' '}
+              <span className="type-serif-accent font-normal">
+                Architectural
+              </span>{' '}
+              Plates
             </h2>
           </div>
-          <div className="col-span-4 md:col-span-4 lg:col-span-6 lg:text-right">
-            <p className="type-meta text-[var(--ink-secondary)]">
-              THREE COMMISSIONS — PROPORTION, HARDWARE &amp; PRINT
-            </p>
+          <div className="col-span-4 flex flex-wrap items-center justify-between gap-4 md:col-span-3 lg:col-span-5 lg:justify-end">
+            <span className="type-meta text-[var(--ink-secondary)]">
+              HOVER FOR X-RAY FLASHLIGHT OR LOCK:
+            </span>
+            <button
+              type="button"
+              onClick={() => setXrayLocked((v) => !v)}
+              aria-pressed={xrayLocked}
+              className={`fw-btn-tactile type-meta min-h-[38px] rounded-[2px] border px-3.5 py-1.5 transition-colors ${
+                xrayLocked
+                  ? 'border-[var(--accent-vermilion)] bg-[var(--accent-vermilion)] text-[#FAF9F6]'
+                  : 'border-[var(--border-hairline-strong)] bg-[var(--bg-surface)] text-[var(--ink-primary)] hover:border-[var(--ink-primary)]'
+              }`}
+            >
+              {xrayLocked ? 'X-RAY BLUEPRINT: ON' : 'X-RAY BLUEPRINT: HOVER'}
+            </button>
           </div>
         </div>
 
@@ -130,7 +257,8 @@ export function WorksSection({ reducedMotion, onDrawerChange }: WorksSectionProp
                   <div className="fw-grid mb-5 items-end">
                     <div className="col-span-4 md:col-span-5 lg:col-span-7">
                       <span className="exhibition-meta-reveal type-meta mb-2 block text-[var(--ink-secondary)]">
-                        PLATE {work.index} — {work.client.toUpperCase()}
+                        PLATE {work.index} // {work.code} —{' '}
+                        {work.client.toUpperCase()} ({work.location})
                       </span>
                       <h3 className="exhibition-meta-reveal type-h2 text-[var(--ink-primary)]">
                         <button
@@ -147,7 +275,7 @@ export function WorksSection({ reducedMotion, onDrawerChange }: WorksSectionProp
                         {work.disciplines.map((d) => (
                           <span
                             key={d}
-                            className="type-meta rounded-[2px] border border-[var(--border-hairline)] px-2.5 py-1 text-[var(--ink-secondary)]"
+                            className="type-meta rounded-[2px] border border-[var(--border-hairline)] bg-[var(--bg-surface)] px-2.5 py-1 text-[var(--ink-secondary)]"
                           >
                             {d}
                           </span>
@@ -158,7 +286,7 @@ export function WorksSection({ reducedMotion, onDrawerChange }: WorksSectionProp
                         onClick={() => setSelectedWork(work)}
                         className="fw-btn-tactile type-meta min-h-[44px] px-2 text-[var(--accent-vermilion)] hover:opacity-75"
                       >
-                        INSPECT PLATE →
+                        OPEN DOSSIER →
                       </button>
                     </div>
                   </div>
@@ -166,9 +294,10 @@ export function WorksSection({ reducedMotion, onDrawerChange }: WorksSectionProp
                   <button
                     type="button"
                     onClick={() => setSelectedWork(work)}
+                    onPointerMove={handlePlatePointerMove}
                     data-cursor="view"
-                    data-cursor-label="INSPECT"
-                    className="exhibition-plate-frame block w-full overflow-hidden rounded-[2px] border border-[var(--border-hairline)] bg-[var(--bg-surface)] text-left"
+                    data-cursor-label="X-RAY / OPEN"
+                    className="exhibition-plate-frame group/plate relative block w-full overflow-hidden rounded-[2px] border border-[var(--border-hairline)] bg-[var(--bg-surface)] text-left"
                     aria-label={`Inspect ${work.title}`}
                   >
                     <div className="aspect-[16/9] w-full overflow-hidden lg:aspect-[21/9]">
@@ -177,10 +306,11 @@ export function WorksSection({ reducedMotion, onDrawerChange }: WorksSectionProp
                           src={work.image}
                           alt={work.alt}
                           loading={work.index === '01' ? 'eager' : 'lazy'}
-                          className="h-full w-full origin-center object-cover transition-transform duration-[380ms] ease-[var(--ease-out)] group-hover:scale-[1.025]"
+                          className="h-full w-full origin-center object-cover transition-transform duration-[420ms] ease-[var(--ease-out)] group-hover/plate:scale-[1.03]"
                         />
                       </div>
                     </div>
+                    <BlueprintOverlay work={work} forceFull={xrayLocked} />
                   </button>
                 </article>
               );
@@ -202,9 +332,10 @@ export function WorksSection({ reducedMotion, onDrawerChange }: WorksSectionProp
                     <button
                       type="button"
                       onClick={() => setSelectedWork(work)}
+                      onPointerMove={handlePlatePointerMove}
                       data-cursor="view"
-                      data-cursor-label="INSPECT"
-                      className="exhibition-plate-frame block w-full overflow-hidden rounded-[2px] border border-[var(--border-hairline)] bg-[var(--bg-surface)] text-left"
+                      data-cursor-label="X-RAY / OPEN"
+                      className="exhibition-plate-frame group/plate relative block w-full overflow-hidden rounded-[2px] border border-[var(--border-hairline)] bg-[var(--bg-surface)] text-left"
                       aria-label={`Inspect ${work.title}`}
                     >
                       <div className="aspect-[16/10] w-full overflow-hidden">
@@ -213,14 +344,15 @@ export function WorksSection({ reducedMotion, onDrawerChange }: WorksSectionProp
                             src={work.image}
                             alt={work.alt}
                             loading={work.index === '01' ? 'eager' : 'lazy'}
-                            className="h-full w-full origin-center object-cover transition-transform duration-[380ms] ease-[var(--ease-out)] group-hover:scale-[1.025]"
+                            className="h-full w-full origin-center object-cover transition-transform duration-[420ms] ease-[var(--ease-out)] group-hover/plate:scale-[1.03]"
                           />
                         </div>
                       </div>
+                      <BlueprintOverlay work={work} forceFull={xrayLocked} />
                     </button>
                   </div>
 
-                  {/* Metadata Column (no captions under image) */}
+                  {/* Metadata Column */}
                   <div
                     className={`col-span-4 flex h-full flex-col justify-between border-t border-[var(--border-hairline)] pt-5 md:col-span-3 lg:pt-0 ${
                       isLeftWide
@@ -229,11 +361,13 @@ export function WorksSection({ reducedMotion, onDrawerChange }: WorksSectionProp
                     }`}
                   >
                     <div>
-                      <div className="exhibition-meta-reveal mb-4 flex items-center justify-between text-[var(--ink-secondary)]">
-                        <span className="type-meta">PLATE {work.index}</span>
+                      <div className="exhibition-meta-reveal mb-3 flex items-center justify-between text-[var(--ink-secondary)]">
+                        <span className="type-meta">
+                          PLATE {work.index} // {work.code}
+                        </span>
                         <span className="type-meta">{work.year}</span>
                       </div>
-                      <h3 className="exhibition-meta-reveal type-h2 mb-3 text-[var(--ink-primary)]">
+                      <h3 className="exhibition-meta-reveal type-h2 mb-2 text-[var(--ink-primary)]">
                         <button
                           type="button"
                           onClick={() => setSelectedWork(work)}
@@ -242,17 +376,23 @@ export function WorksSection({ reducedMotion, onDrawerChange }: WorksSectionProp
                           {work.title}
                         </button>
                       </h3>
-                      <p className="exhibition-meta-reveal mb-6 max-w-[38ch] text-base leading-relaxed text-[var(--ink-secondary)]">
+                      <p className="exhibition-meta-reveal type-meta mb-4 text-[var(--accent-vermilion)]">
+                        {work.client.toUpperCase()} — {work.location.toUpperCase()}
+                      </p>
+                      <p className="exhibition-meta-reveal mb-4 max-w-[38ch] text-base leading-relaxed text-[var(--ink-secondary)]">
                         {work.summary}
+                      </p>
+                      <p className="exhibition-meta-reveal mb-6 border-l-2 border-[var(--accent-vermilion)]/60 pl-3 text-sm leading-relaxed text-[var(--ink-primary)]">
+                        {work.craftNote}
                       </p>
                     </div>
 
-                    <div className="exhibition-meta-reveal space-y-4">
-                      <div className="flex flex-wrap gap-2">
+                    <div className="exhibition-meta-reveal space-y-4 border-t border-[var(--border-hairline)] pt-4">
+                      <div className="flex flex-wrap gap-1.5">
                         {work.disciplines.map((d) => (
                           <span
                             key={d}
-                            className="type-meta rounded-[2px] border border-[var(--border-hairline)] px-2.5 py-1 text-[var(--ink-secondary)]"
+                            className="type-meta rounded-[2px] border border-[var(--border-hairline)] bg-[var(--bg-surface)] px-2.5 py-1 text-[var(--ink-secondary)]"
                           >
                             {d}
                           </span>
@@ -264,10 +404,10 @@ export function WorksSection({ reducedMotion, onDrawerChange }: WorksSectionProp
                         onClick={() => setSelectedWork(work)}
                         className="fw-btn-tactile type-meta inline-flex min-h-[44px] items-center gap-2 text-[var(--ink-primary)] hover:text-[var(--accent-vermilion)]"
                       >
-                        <span>READ SPECIFICATIONS</span>
+                        <span>INSPECT TECHNICAL DOSSIER</span>
                         <span
                           aria-hidden="true"
-                          className="inline-block transition-transform duration-[180ms] ease-[var(--ease-out)] group-hover:translate-x-[3px]"
+                          className="inline-block transition-transform duration-[180ms] ease-[var(--ease-out)] group-hover:translate-x-[4px]"
                         >
                           →
                         </span>
@@ -289,13 +429,14 @@ export function WorksSection({ reducedMotion, onDrawerChange }: WorksSectionProp
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.18, ease: [0.23, 1, 0.32, 1] }}
-            className="fixed inset-0 z-50 flex items-center justify-end bg-[#161614]/55 p-4 backdrop-blur-[2px] sm:p-6"
+            className="fixed inset-0 z-50 flex items-center justify-end bg-[#161614]/60 p-4 backdrop-blur-[2px] sm:p-6"
             onClick={() => setSelectedWork(null)}
             role="dialog"
             aria-modal="true"
             aria-labelledby="work-modal-title"
           >
             <motion.div
+              data-lenis-prevent
               initial={{ opacity: 0, x: 24, scale: 0.985 }}
               animate={{ opacity: 1, x: 0, scale: 1 }}
               exit={{ opacity: 0, x: 16, scale: 0.985 }}
@@ -305,7 +446,8 @@ export function WorksSection({ reducedMotion, onDrawerChange }: WorksSectionProp
             >
               <div className="mb-6 flex items-center justify-between border-b border-[var(--border-hairline)] pb-4">
                 <span className="type-meta text-[var(--ink-secondary)]">
-                  PLATE {selectedWork.index} — {selectedWork.client.toUpperCase()}
+                  PLATE {selectedWork.index} // {selectedWork.code} —{' '}
+                  {selectedWork.client.toUpperCase()}
                 </span>
                 <button
                   type="button"
@@ -316,9 +458,16 @@ export function WorksSection({ reducedMotion, onDrawerChange }: WorksSectionProp
                 </button>
               </div>
 
-              <h3 id="work-modal-title" className="type-h1 mb-4 text-[var(--ink-primary)]">
+              <h3
+                id="work-modal-title"
+                className="type-h1 mb-2 text-[var(--ink-primary)]"
+              >
                 {selectedWork.title}
               </h3>
+              <p className="type-meta mb-6 text-[var(--accent-vermilion)]">
+                {selectedWork.location.toUpperCase()} — DIMENSIONS:{' '}
+                {selectedWork.dimensions}
+              </p>
 
               <div className="mb-6 aspect-[16/10] w-full overflow-hidden rounded-[2px] border border-[var(--border-hairline)]">
                 <img
@@ -339,7 +488,7 @@ export function WorksSection({ reducedMotion, onDrawerChange }: WorksSectionProp
                 <span className="type-meta mb-3 block text-[var(--ink-secondary)]">
                   TECHNICAL SPECIFICATIONS
                 </span>
-                <dl className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+                <dl className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                   {selectedWork.specifications.map((spec) => (
                     <div
                       key={spec.label}

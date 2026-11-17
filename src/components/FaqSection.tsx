@@ -12,13 +12,19 @@ export function FaqSection({ reducedMotion }: { reducedMotion: boolean }) {
     >
       <div className="fw-container">
         <div className="fw-grid items-start gap-y-10">
-          <div className="col-span-4 md:col-span-8 lg:col-span-4">
+          <div className="col-span-4 md:col-span-8 lg:sticky lg:top-24 lg:col-span-4">
             <span className="type-meta mb-3 block text-[var(--ink-secondary)]">
-              10 / QUESTIONS
+              14 / WORKING NOTES
             </span>
-            <h2 className="type-h1 text-[var(--ink-primary)]">
-              Working Notes
+            <h2 className="type-h1 mb-4 text-[var(--ink-primary)]">
+              Technical &amp;{' '}
+              <span className="type-serif-accent font-normal">Studio</span>{' '}
+              Protocol
             </h2>
+            <p className="max-w-[36ch] text-base leading-relaxed text-[var(--ink-secondary)]">
+              Direct answers on how we architect codebases, enforce frame
+              budgets, and structure commissions.
+            </p>
           </div>
 
           <div className="col-span-4 md:col-span-8 lg:col-span-7 lg:col-start-6">
@@ -31,10 +37,10 @@ export function FaqSection({ reducedMotion }: { reducedMotion: boolean }) {
                       type="button"
                       aria-expanded={isOpen}
                       onClick={() => setOpenId(isOpen ? null : item.id)}
-                      className="flex min-h-[68px] w-full items-center justify-between gap-6 py-5 text-left transition-colors duration-150 hover:text-[var(--accent-vermilion)]"
+                      className="flex min-h-[72px] w-full items-center justify-between gap-6 py-5 text-left transition-colors duration-150 hover:text-[var(--accent-vermilion)]"
                     >
                       <div className="flex items-baseline gap-4">
-                        <span className="type-meta text-[var(--ink-secondary)]">
+                        <span className="type-meta text-[var(--accent-vermilion)]">
                           0{idx + 1}
                         </span>
                         <span className="type-h3 text-[var(--ink-primary)]">
@@ -44,7 +50,9 @@ export function FaqSection({ reducedMotion }: { reducedMotion: boolean }) {
                       <span
                         aria-hidden="true"
                         className={`type-meta shrink-0 transition-transform duration-200 ease-[var(--ease-out)] ${
-                          isOpen ? 'rotate-45 text-[var(--accent-vermilion)]' : ''
+                          isOpen
+                            ? 'rotate-45 text-[var(--accent-vermilion)]'
+                            : ''
                         }`}
                       >
                         +
@@ -71,9 +79,14 @@ export function FaqSection({ reducedMotion }: { reducedMotion: boolean }) {
                           }}
                           className="overflow-hidden"
                         >
-                          <p className="max-w-[56ch] pb-6 pl-8 text-base leading-relaxed text-[var(--ink-secondary)]">
-                            {item.answer}
-                          </p>
+                          <div className="pb-6 pl-8">
+                            <p className="max-w-[56ch] text-base leading-relaxed text-[var(--ink-secondary)]">
+                              {item.answer}
+                            </p>
+                            <span className="type-meta mt-3 inline-block rounded-[2px] border border-[var(--border-hairline)] bg-[var(--bg-canvas)] px-2.5 py-1 text-[var(--ink-primary)]">
+                              {item.specNote}
+                            </span>
+                          </div>
                         </motion.div>
                       )}
                     </AnimatePresence>
@@ -87,4 +100,3 @@ export function FaqSection({ reducedMotion }: { reducedMotion: boolean }) {
     </section>
   );
 }
-
