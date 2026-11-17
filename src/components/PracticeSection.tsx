@@ -1,102 +1,113 @@
-import { useEffect, useRef } from 'react';
-import anime from 'animejs';
-import { PRACTICE_MANIFESTO } from '../data/exhibition';
+import { useEffect, useRef, useState } from 'react';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { ARCHIVE_LEDGER } from '../data/exhibition';
 
-interface PracticeSectionProps {
-  reducedMotion: boolean;
-}
+gsap.registerPlugin(ScrollTrigger);
 
-export function PracticeSection({ reducedMotion }: PracticeSectionProps) {
-  const sectionRef = useRef<HTMLElement>(null);
+const AXIOMS = ['Form follows friction.', 'Detail compounds trust.', 'Motion is architecture in time.'];
+
+// SEQUENCE 05 — the dark taktil section transforms into this one: a circular mask
+// of limestone grows out of basalt as you scroll in.
+export function PracticeSection({ reducedMotion }: { reducedMotion: boolean }) {
+  const rootRef = useRef<HTMLElement>(null);
+  const revealRef = useRef<HTMLDivElement>(null);
+  const previewRef = useRef<HTMLDivElement>(null);
+  const ledgerRef = useRef<HTMLDivElement>(null);
+  const [row, setRow] = useState<number | null>(null);
 
   useEffect(() => {
-    if (reducedMotion || !sectionRef.current) return;
-
-    const items = sectionRef.current.querySelectorAll('.manifesto-item');
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            const parts = entry.target.querySelectorAll('.manifesto-part');
-            anime({
-              targets: parts,
-              opacity: [0, 1],
-              translateY: [12, 0],
-              duration: 420,
-              delay: anime.stagger(45),
-              easing: 'cubicBezier(0.23, 1, 0.32, 1)',
-            });
-            observer.unobserve(entry.target);
-          }
-        });
-      },
-      { threshold: 0.2 }
-    );
-
-    items.forEach((el) => {
-      el.querySelectorAll('.manifesto-part').forEach((part) => {
-        (part as HTMLElement).style.opacity = '0';
+    if (reducedMotion || !revealRef.current) return;
+    const ctx = gsap.context(() => {
+      gsap.fromTo(
+        revealRef.current,
+        { clipPath: 'circle(8% at 50% 0%)' },
+        {
+          clipPath: 'circle(150% at 50% 0%)',
+          ease: 'none',
+          scrollTrigger: { trigger: rootRef.current, start: 'top bottom', end: 'top 15%', scrub: true },
+        }
+      );
+      gsap.utils.toArray<HTMLElement>('.ax-line').forEach((el) => {
+        gsap.fromTo(
+          el,
+          { xPercent: -6, opacity: 0.15 },
+          { xPercent: 0, opacity: 1, ease: 'none', scrollTrigger: { trigger: el, start: 'top 92%', end: 'top 55%', scrub: true } }
+        );
       });
-      observer.observe(el);
-    });
+    }, rootRef);
+    return () => ctx.revert();
+  }, [reducedMotion]);
 
-    const partsAll = sectionRef.current.querySelectorAll('.manifesto-part');
-    return () => {
-      observer.disconnect();
-      anime.remove(partsAll);
+  useEffect(() => {
+    const el = previewRef.current;
+    const box = ledgerRef.current;
+    if (!el || !box || !window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
+    gsap.set(el, { xPercent: -50, yPercent: -50 });
+    const xTo = gsap.quickTo(el, 'x', { duration: reducedMotion ? 0.01 : 0.55, ease: 'power3.out' });
+    const yTo = gsap.quickTo(el, 'y', { duration: reducedMotion ? 0.01 : 0.55, ease: 'power3.out' });
+    const rTo = gsap.quickTo(el, 'rotation', { duration: 0.45, ease: 'power3.out' });
+    let last = 0;
+    const move = (e: PointerEvent) => {
+      xTo(e.clientX);
+      yTo(e.clientY);
+      if (!reducedMotion) rTo(gsap.utils.clamp(-7, 7, (e.clientX - last) * 0.35));
+      last = e.clientX;
     };
+    box.addEventListener('pointermove', move, { passive: true });
+    return () => box.removeEventListener('pointermove', move);
   }, [reducedMotion]);
 
   return (
-    <section
-      id="practice"
-      ref={sectionRef}
-      className="py-[clamp(5rem,10vw,9rem)]"
-    >
-      <div className="fw-container">
-        <div className="fw-grid items-start gap-y-12">
-          {/* Left Sticky Column: Cols 1-4 */}
-          <div className="col-span-4 md:col-span-8 lg:sticky lg:top-24 lg:col-span-4">
-            <span className="type-meta mb-3 block text-[var(--ink-secondary)]">
-              04 / PRACTICE &amp; ETHOS
-            </span>
-            <h2 className="type-h1 mb-6 text-[var(--ink-primary)]">
-              Built for the{' '}
-              <span className="type-serif-accent font-normal">critical</span>{' '}
-              eye.
-            </h2>
-
-            <div className="space-y-2 border-t border-[var(--border-hairline)] pt-5 text-[var(--ink-secondary)]">
-              <p className="type-meta">KREIS 5 — ZURICH</p>
-              <p className="type-meta">KEMANG — JAKARTA</p>
-            </div>
+    <section id="practice" ref={rootRef} className="bg-[var(--bg-darkroom)]">
+      <div ref={revealRef} className="bg-[var(--bg-canvas)] py-[clamp(5rem,10vw,9rem)]">
+        <div className="fw-container">
+          <div className="mb-20 space-y-2">
+            {AXIOMS.map((a) => (
+              <p key={a} className="ax-line text-[clamp(2.2rem,6.4vw,6rem)] font-extrabold leading-[0.98] tracking-[-0.045em]">
+                {a}
+              </p>
+            ))}
           </div>
 
-          {/* Right Manifesto Column: Cols 5-12 */}
-          <div className="col-span-4 md:col-span-8 lg:col-span-7 lg:col-start-6">
-            <div className="divide-y divide-[var(--border-hairline)] border-y border-[var(--border-hairline)]">
-              {PRACTICE_MANIFESTO.map((point) => (
-                <article
-                  key={point.index}
-                  className="manifesto-item group py-10 first:pt-8 last:pb-8"
+          <div ref={ledgerRef} onPointerLeave={() => setRow(null)}>
+            <div className="mb-4 flex items-baseline justify-between">
+              <span className="type-meta text-[var(--accent-vermilion)]">LEDGER 2024–26</span>
+              <span className="type-meta text-[var(--ink-secondary)]">ZURICH — JAKARTA</span>
+            </div>
+            <ul className="divide-y divide-[var(--border-hairline)] border-y border-[var(--border-hairline)]">
+              {ARCHIVE_LEDGER.map((e, i) => (
+                <li
+                  key={e.id}
+                  onPointerEnter={() => setRow(i)}
+                  data-cursor="view"
+                  data-cursor-label={e.code}
+                  className={`flex items-baseline justify-between gap-4 py-4 transition-all duration-300 ease-[var(--ease-out)] ${
+                    row !== null && row !== i ? 'opacity-30' : ''
+                  } ${row === i ? 'sm:translate-x-2' : ''}`}
                 >
-                  <div className="grid grid-cols-1 gap-4 sm:grid-cols-12">
-                    <div className="sm:col-span-2">
-                      <span className="manifesto-part type-meta inline-block text-[var(--ink-secondary)] transition-colors duration-150 group-hover:text-[var(--accent-vermilion)]">
-                        {point.index}
-                      </span>
-                    </div>
-                    <div className="sm:col-span-10">
-                      <h3 className="manifesto-part type-h2 mb-3 text-[var(--ink-primary)]">
-                        {point.heading}
-                      </h3>
-                      <p className="manifesto-part type-body-lg max-w-[55ch] text-[var(--ink-secondary)]">
-                        {point.body}
-                      </p>
-                    </div>
-                  </div>
-                </article>
+                  <span className="type-meta w-24 shrink-0 text-[var(--accent-vermilion)]">{e.code}</span>
+                  <span className="flex-1 text-xl font-medium tracking-[-0.02em] sm:text-3xl">{e.title}</span>
+                  <span className="type-meta text-[var(--ink-secondary)]">{e.year}</span>
+                </li>
               ))}
+            </ul>
+
+            <div
+              ref={previewRef}
+              aria-hidden="true"
+              className={`pointer-events-none fixed left-0 top-0 z-40 hidden aspect-[4/3] w-[300px] overflow-hidden rounded-[2px] bg-[#161614] shadow-xl transition-[opacity,scale] duration-300 lg:block ${
+                row !== null ? 'scale-100 opacity-100' : 'scale-0 opacity-0'
+              }`}
+            >
+              <div
+                className="h-full w-full"
+                style={{ transform: `translateY(${(row ?? 0) * -100}%)`, transition: 'transform 460ms cubic-bezier(0.76,0,0.24,1)' }}
+              >
+                {ARCHIVE_LEDGER.map((e) => (
+                  <img key={e.id} src={e.image} alt="" loading="eager" className="h-full w-full object-cover" />
+                ))}
+              </div>
             </div>
           </div>
         </div>

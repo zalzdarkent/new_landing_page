@@ -4,6 +4,7 @@ import { motion } from 'motion/react';
 const MEASURES = ['45ch', '62ch', '75ch'] as const;
 const TRACKINGS = ['-0.03em', '-0.01em', '0.02em'] as const;
 const LEADINGS = [1.25, 1.55, 1.8] as const;
+const PROXIMITY_WORD = 'PROPORTION';
 
 export function TypographyLabSection({
   reducedMotion,
@@ -13,6 +14,8 @@ export function TypographyLabSection({
   const [measure, setMeasure] = useState<(typeof MEASURES)[number]>('62ch');
   const [tracking, setTracking] = useState<(typeof TRACKINGS)[number]>('-0.01em');
   const [leading, setLeading] = useState<(typeof LEADINGS)[number]>(1.55);
+  const [showBaseline, setShowBaseline] = useState(true);
+  const [hoveredCharIdx, setHoveredCharIdx] = useState<number | null>(null);
 
   return (
     <section
@@ -23,16 +26,72 @@ export function TypographyLabSection({
         <div className="fw-grid mb-12 items-end border-b border-[var(--border-hairline)] pb-6">
           <div className="col-span-4 md:col-span-5 lg:col-span-7">
             <span className="type-meta mb-3 block text-[var(--ink-secondary)]">
-              07 / TYPOGRAPHIC WORKBENCH
+              11 / TYPOGRAPHIC WORKBENCH
             </span>
             <h2 className="type-h1 text-[var(--ink-primary)]">
-              Optical Calibration
+              Optical{' '}
+              <span className="type-serif-accent font-normal">Calibration</span>{' '}
+              &amp; Proximity
             </h2>
           </div>
           <div className="col-span-4 md:col-span-3 lg:col-span-5 lg:text-right">
             <span className="type-meta text-[var(--ink-secondary)]">
-              ADJUST MEASURE, TRACKING &amp; LEADING LIVE
+              ADJUST MEASURE, TRACKING, LEADING &amp; GLYPH PROXIMITY
             </span>
+          </div>
+        </div>
+
+        {/* Interactive Cursor-Proximity Kinetic Specimen Bar (frontend-atlas text-effects.md#12) */}
+        <div
+          onPointerLeave={() => setHoveredCharIdx(null)}
+          data-cursor="label"
+          data-cursor-label="OPTICAL FIELD"
+          className="mb-10 rounded-[2px] border border-[var(--border-hairline-strong)] bg-[var(--bg-canvas)] p-6 sm:p-8"
+        >
+          <div className="mb-4 flex flex-wrap items-center justify-between gap-2 border-b border-[var(--border-hairline)] pb-3">
+            <span className="type-meta text-[var(--ink-secondary)]">
+              SPECIMEN 11-A // EUCLIDEAN CURSOR-PROXIMITY GLYPH FIELD
+            </span>
+            <span className="type-meta text-[var(--accent-vermilion)]">
+              {hoveredCharIdx !== null
+                ? `GLYPH [${PROXIMITY_WORD[hoveredCharIdx]}] — WEIGHT 800`
+                : 'SWEEP ACROSS GLYPHS'}
+            </span>
+          </div>
+
+          <div
+            aria-label={PROXIMITY_WORD}
+            className="flex items-center justify-between py-2 select-none"
+          >
+            {Array.from(PROXIMITY_WORD).map((char, idx) => {
+              const dist =
+                hoveredCharIdx === null ? 99 : Math.abs(hoveredCharIdx - idx);
+              const weightFactor =
+                dist === 0 ? 1 : dist === 1 ? 0.6 : dist === 2 ? 0.25 : 0;
+
+              return (
+                <span
+                  key={idx}
+                  onPointerEnter={() => setHoveredCharIdx(idx)}
+                  style={
+                    reducedMotion
+                      ? undefined
+                      : {
+                          transform: `translateY(${-weightFactor * 10}px) scaleY(${
+                            1 + weightFactor * 0.14
+                          })`,
+                          color:
+                            dist === 0
+                              ? 'var(--accent-vermilion)'
+                              : 'var(--ink-primary)',
+                        }
+                  }
+                  className="inline-block cursor-default font-extrabold text-[clamp(2.2rem,7.2vw,6.4rem)] leading-none tracking-[-0.04em] transition-all duration-200 ease-[var(--ease-out)]"
+                >
+                  {char}
+                </span>
+              );
+            })}
           </div>
         </div>
 
@@ -51,7 +110,7 @@ export function TypographyLabSection({
                     type="button"
                     onClick={() => setMeasure(m)}
                     aria-pressed={measure === m}
-                    className={`fw-btn-tactile type-meta min-h-[44px] rounded-[2px] border transition-colors ${
+                    className={`fw-btn-tactile type-meta min-h-[42px] rounded-[2px] border transition-colors ${
                       measure === m
                         ? 'border-[var(--accent-vermilion)] bg-[var(--accent-vermilion)] text-[#FAF9F6]'
                         : 'border-[var(--border-hairline)] bg-[var(--bg-surface)] text-[var(--ink-primary)] hover:border-[var(--ink-primary)]'
@@ -75,7 +134,7 @@ export function TypographyLabSection({
                     type="button"
                     onClick={() => setTracking(t)}
                     aria-pressed={tracking === t}
-                    className={`fw-btn-tactile type-meta min-h-[44px] rounded-[2px] border transition-colors ${
+                    className={`fw-btn-tactile type-meta min-h-[42px] rounded-[2px] border transition-colors ${
                       tracking === t
                         ? 'border-[var(--accent-vermilion)] bg-[var(--accent-vermilion)] text-[#FAF9F6]'
                         : 'border-[var(--border-hairline)] bg-[var(--bg-surface)] text-[var(--ink-primary)] hover:border-[var(--ink-primary)]'
@@ -99,7 +158,7 @@ export function TypographyLabSection({
                     type="button"
                     onClick={() => setLeading(l)}
                     aria-pressed={leading === l}
-                    className={`fw-btn-tactile type-meta min-h-[44px] rounded-[2px] border transition-colors ${
+                    className={`fw-btn-tactile type-meta min-h-[42px] rounded-[2px] border transition-colors ${
                       leading === l
                         ? 'border-[var(--accent-vermilion)] bg-[var(--accent-vermilion)] text-[#FAF9F6]'
                         : 'border-[var(--border-hairline)] bg-[var(--bg-surface)] text-[var(--ink-primary)] hover:border-[var(--ink-primary)]'
@@ -109,6 +168,25 @@ export function TypographyLabSection({
                   </button>
                 ))}
               </div>
+            </div>
+
+            {/* Baseline Rule Toggle */}
+            <div className="flex items-center justify-between border-t border-[var(--border-hairline)] pt-4">
+              <span className="type-meta text-[var(--ink-secondary)]">
+                BASELINE RULER OVERLAY
+              </span>
+              <button
+                type="button"
+                onClick={() => setShowBaseline((b) => !b)}
+                aria-pressed={showBaseline}
+                className={`type-meta rounded-[2px] border px-3 py-1 transition-colors ${
+                  showBaseline
+                    ? 'border-[var(--accent-vermilion)] bg-[var(--accent-vermilion)] text-[#FAF9F6]'
+                    : 'border-[var(--border-hairline)] bg-[var(--bg-surface)] text-[var(--ink-primary)]'
+                }`}
+              >
+                {showBaseline ? 'VISIBLE' : 'HIDDEN'}
+              </button>
             </div>
 
             {/* Live CSS Readout */}
@@ -124,9 +202,21 @@ export function TypographyLabSection({
 
           {/* Right Live Specimen: Cols 5-12 */}
           <div className="col-span-4 md:col-span-8 lg:col-span-8 lg:pl-6">
-            <div className="flex min-h-[360px] flex-col justify-between rounded-[2px] border border-[var(--border-hairline)] bg-[var(--bg-canvas)] p-6 sm:p-10">
+            <div
+              style={
+                showBaseline
+                  ? {
+                      backgroundImage:
+                        'repeating-linear-gradient(to bottom, transparent, transparent 27px, rgba(217, 56, 30, 0.1) 28px)',
+                    }
+                  : undefined
+              }
+              className="flex min-h-[390px] flex-col justify-between rounded-[2px] border border-[var(--border-hairline)] bg-[var(--bg-canvas)] p-6 sm:p-10"
+            >
               <div className="mb-6 flex items-center justify-between border-b border-[var(--border-hairline)] pb-4 text-[var(--ink-secondary)]">
-                <span className="type-meta">SPECIMEN — CABINET GROTESK + INSTRUMENT SERIF</span>
+                <span className="type-meta">
+                  SPECIMEN 11-B — CABINET GROTESK + INSTRUMENT SERIF
+                </span>
                 <span className="type-meta text-[var(--accent-vermilion)]">
                   {measure === '62ch' && leading === 1.55
                     ? 'OPTIMAL EDITORIAL RATIO'
@@ -146,14 +236,15 @@ export function TypographyLabSection({
               >
                 <p>
                   Good typography is{' '}
-                  <span className="type-serif-accent text-[1.15em]">
+                  <span className="type-serif-accent text-[1.15em] text-[var(--accent-vermilion)]">
                     architectural silence
                   </span>
-                  : the eye moves from left margin to right return without
-                  stumbling over cramped leading, arbitrary tracking, or
-                  runaway line lengths. Setting body prose around{' '}
+                  : the eye travels from left datum to right return without
+                  stumbling over cramped leading, arbitrary tracking, or runaway
+                  line lengths. Setting body prose around{' '}
                   <span className="font-mono text-[0.85em]">62ch</span> with
-                  relaxed leading gives dense ideas room to breathe.
+                  calibrated leading gives complex engineering ideas room to
+                  breathe.
                 </p>
               </motion.div>
 
@@ -168,4 +259,3 @@ export function TypographyLabSection({
     </section>
   );
 }
-
