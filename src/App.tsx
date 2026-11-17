@@ -3,54 +3,38 @@ import Lenis from 'lenis';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useReducedMotion } from './hooks/useReducedMotion';
+import { CHAPTER_SECTIONS } from './data/stark';
 import { TopRail } from './components/TopRail';
 import { LiveGridOverlay } from './components/LiveGridOverlay';
 import { CustomCursor } from './components/CustomCursor';
 import { HeroSection } from './components/HeroSection';
 import { VelocityTicker } from './components/VelocityTicker';
-import { BigIdeaSection } from './components/BigIdeaSection';
-import { WorksSection } from './components/WorksSection';
-import { ArchiveStrip } from './components/ArchiveStrip';
-import { CapabilitiesSection } from './components/CapabilitiesSection';
-import { ProcessSection } from './components/ProcessSection';
-import { DarkRoomSpecimen } from './components/DarkRoomSpecimen';
-import { TypographyLabSection } from './components/TypographyLabSection';
-import { ComparisonSection } from './components/ComparisonSection';
-import { PracticeSection } from './components/PracticeSection';
-import { FaqSection } from './components/FaqSection';
-import { ColophonFooter } from './components/ColophonFooter';
+import { ArcReactorPortalSection } from './components/sections/ArcReactorPortalSection';
+import { HelmetAssemblySection } from './components/sections/HelmetAssemblySection';
+import { ArmorShowcaseSection } from './components/sections/ArmorShowcaseSection';
+import { ArmorAssemblySection } from './components/sections/ArmorAssemblySection';
+import { EvolutionSection } from './components/sections/EvolutionSection';
+import { TechnologySchematicSection } from './components/sections/TechnologySchematicSection';
+import { SuitSystemSection } from './components/sections/SuitSystemSection';
+import { ArmoryGallerySection } from './components/sections/ArmoryGallerySection';
+import { FlightSystemSection } from './components/sections/FlightSystemSection';
+import { StarkEnvironmentSection } from './components/sections/StarkEnvironmentSection';
+import { FinalFormSection } from './components/sections/FinalFormSection';
 
 gsap.registerPlugin(ScrollTrigger);
 
 export function App() {
   const reducedMotion = useReducedMotion();
   const [gridVisible, setGridVisible] = useState(false);
-  const [activeSection, setActiveSection] = useState('hero');
-  const [commissionOpen, setCommissionOpen] = useState(false);
-  const [workDrawerOpen, setWorkDrawerOpen] = useState(false);
+  const [activeSection, setActiveSection] = useState('awakening');
   const lenisRef = useRef<Lenis | null>(null);
 
-  // Pause Lenis background scroll while any drawer is open
-  useEffect(() => {
-    const anyOpen = commissionOpen || workDrawerOpen;
-    if (anyOpen) {
-      lenisRef.current?.stop();
-      document.body.style.overflow = 'hidden';
-    } else {
-      lenisRef.current?.start();
-      document.body.style.overflow = '';
-    }
-    return () => {
-      document.body.style.overflow = '';
-    };
-  }, [commissionOpen, workDrawerOpen]);
-
-  // Sync Lenis smooth scroll with GSAP ScrollTrigger (disabled for reduced motion)
+  // Sync Lenis smooth scroll with GSAP ScrollTrigger
   useEffect(() => {
     if (reducedMotion) return;
 
     const lenis = new Lenis({
-      duration: 1.0,
+      duration: 1.05,
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
       smoothWheel: true,
     });
@@ -82,8 +66,8 @@ export function App() {
 
       if (lenisRef.current && !reducedMotion) {
         lenisRef.current.scrollTo(target, {
-          offset: id === 'hero' ? 0 : -64,
-          duration: 0.95,
+          offset: 0,
+          duration: 1.0,
           easing: (t) => 1 - Math.pow(1 - t, 4),
         });
       } else {
@@ -93,20 +77,8 @@ export function App() {
     [reducedMotion]
   );
 
-  // Track active chapter for TopRail indicator and Dark-Room chrome shift
+  // Track active chapter for TopRail HUD indicator
   useEffect(() => {
-    const ids = [
-      'hero',
-      'works',
-      'capabilities',
-      'process',
-      'specimen',
-      'typolab',
-      'comparison',
-      'practice',
-      'faq',
-      'commission',
-    ];
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
@@ -118,7 +90,7 @@ export function App() {
       { rootMargin: '-35% 0px -45% 0px' }
     );
 
-    ids.forEach((id) => {
+    CHAPTER_SECTIONS.forEach(({ id }) => {
       const el = document.getElementById(id);
       if (el) observer.observe(el);
     });
@@ -126,7 +98,7 @@ export function App() {
     return () => observer.disconnect();
   }, []);
 
-  // [G] key toggles live 12-column Swiss grid overlay
+  // [G] key toggles J.A.R.V.I.S. tactical HUD grid overlay
   useEffect(() => {
     const onKeyDown = (e: KeyboardEvent) => {
       const target = e.target as HTMLElement | null;
@@ -147,47 +119,63 @@ export function App() {
   }, []);
 
   return (
-    <div className="fw-grain relative min-h-[100dvh] bg-[var(--bg-canvas)] text-[var(--ink-primary)]">
+    <div className="stark-grain relative min-h-[100dvh] bg-[var(--bg-obsidian)] text-[var(--ink-primary)]">
       <CustomCursor reducedMotion={reducedMotion} />
+      <LiveGridOverlay visible={gridVisible} />
 
       <TopRail
         activeSection={activeSection}
         gridVisible={gridVisible}
         onToggleGrid={() => setGridVisible((v) => !v)}
         onNavigate={scrollToSection}
-        onOpenCommission={() => setCommissionOpen(true)}
       />
 
-      <LiveGridOverlay visible={gridVisible} reducedMotion={reducedMotion} />
-
       <main>
+        {/* 01 // THE AWAKENING */}
         <HeroSection
           reducedMotion={reducedMotion}
           onNavigate={scrollToSection}
         />
-        <VelocityTicker reducedMotion={reducedMotion} />
-        <BigIdeaSection reducedMotion={reducedMotion} />
-        <WorksSection
-          reducedMotion={reducedMotion}
-          onDrawerChange={setWorkDrawerOpen}
-        />
-        <ArchiveStrip reducedMotion={reducedMotion} />
-        <CapabilitiesSection reducedMotion={reducedMotion} />
-        <ProcessSection reducedMotion={reducedMotion} />
-        <DarkRoomSpecimen reducedMotion={reducedMotion} />
-        <TypographyLabSection reducedMotion={reducedMotion} />
-        <ComparisonSection />
-        <PracticeSection reducedMotion={reducedMotion} />
-        <FaqSection reducedMotion={reducedMotion} />
-      </main>
 
-      <ColophonFooter
-        commissionOpen={commissionOpen}
-        onOpenCommission={() => setCommissionOpen(true)}
-        onCloseCommission={() => setCommissionOpen(false)}
-      />
+        <VelocityTicker reducedMotion={reducedMotion} />
+
+        {/* 02 // THE CORE — MORPH 01 */}
+        <ArcReactorPortalSection reducedMotion={reducedMotion} />
+
+        {/* 03 // THE HELMET — MORPH 02 */}
+        <HelmetAssemblySection reducedMotion={reducedMotion} />
+
+        {/* 04 // THE ARMOR */}
+        <ArmorShowcaseSection reducedMotion={reducedMotion} />
+
+        {/* 05 // THE ASSEMBLY — MORPH 03 */}
+        <ArmorAssemblySection reducedMotion={reducedMotion} />
+
+        {/* 06 // THE EVOLUTION */}
+        <EvolutionSection reducedMotion={reducedMotion} />
+
+        {/* 07 // THE TECHNOLOGY — MORPH 04 */}
+        <TechnologySchematicSection reducedMotion={reducedMotion} />
+
+        {/* 08 // THE SUIT SYSTEM */}
+        <SuitSystemSection reducedMotion={reducedMotion} />
+
+        {/* 09 // THE ARMORY */}
+        <ArmoryGallerySection reducedMotion={reducedMotion} />
+
+        {/* 10 // FLIGHT SYSTEM */}
+        <FlightSystemSection reducedMotion={reducedMotion} />
+
+        {/* 11 // STARK INDUSTRIES */}
+        <StarkEnvironmentSection reducedMotion={reducedMotion} />
+
+        {/* 12 // THE FINAL FORM — MORPH 05 */}
+        <FinalFormSection
+          reducedMotion={reducedMotion}
+          onReboot={() => scrollToSection('awakening')}
+        />
+      </main>
     </div>
   );
 }
-
 export default App;

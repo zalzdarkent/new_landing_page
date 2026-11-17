@@ -5,11 +5,12 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 gsap.registerPlugin(ScrollTrigger);
 
 const TICKER_ITEMS = [
-  'SPATIAL WEB SYSTEMS',
-  'SWISS TYPOGRAPHIC MONOGRAPHS',
-  'PHYSICAL-TO-DIGITAL INTERFACES',
-  'ARCHITECTURAL WAYFINDING',
-  'CALIBRATED MOTION ENGINEERING',
+  'STARK INDUSTRIES',
+  'MARK LXXXV',
+  'ARC REACTOR // 24.0 GJ/S',
+  'J.A.R.V.I.S. TACTICAL OS',
+  'VIBRANIUM-NANO MATRIX',
+  'MACH 12.0 PROPULSION',
 ];
 
 export function VelocityTicker({ reducedMotion }: { reducedMotion: boolean }) {
@@ -24,7 +25,7 @@ export function VelocityTicker({ reducedMotion }: { reducedMotion: boolean }) {
       const tween = gsap.to(track, {
         xPercent: -50,
         repeat: -1,
-        duration: 28,
+        duration: 24,
         ease: 'none',
       });
 
@@ -39,13 +40,13 @@ export function VelocityTicker({ reducedMotion }: { reducedMotion: boolean }) {
         end: 'bottom top',
         onUpdate: (self) => {
           const velocity = self.getVelocity();
-          const boost = gsap.utils.clamp(1, 3.8, 1 + Math.abs(velocity) / 450);
+          const boost = gsap.utils.clamp(1, 4.5, 1 + Math.abs(velocity) / 400);
           gsap.to(tween, {
             timeScale: boost,
             duration: 0.25,
             overwrite: true,
           });
-          skewTo(gsap.utils.clamp(-4, 4, velocity / -420));
+          skewTo(gsap.utils.clamp(-5, 5, velocity / -380));
         },
       });
     }, rootRef);
@@ -57,18 +58,28 @@ export function VelocityTicker({ reducedMotion }: { reducedMotion: boolean }) {
     <div
       ref={rootRef}
       aria-hidden="true"
-      className="overflow-hidden border-y border-[var(--border-hairline)] bg-[var(--bg-surface)] py-3.5"
+      className="overflow-hidden border-y border-[var(--border-hud)] bg-[#0A0D12] py-3"
     >
       <div ref={trackRef} className="flex w-max items-center whitespace-nowrap">
         {[0, 1].map((dup) => (
           <div key={dup} className="flex items-center">
-            {TICKER_ITEMS.map((item) => (
+            {TICKER_ITEMS.map((item, idx) => (
               <span
                 key={`${dup}-${item}`}
                 className="type-meta inline-flex items-center gap-6 px-6 text-[var(--ink-secondary)]"
               >
-                <span>{item}</span>
-                <span className="inline-block h-1.5 w-1.5 rounded-full bg-[var(--accent-vermilion)]" />
+                <span className={idx % 2 === 0 ? 'text-[#E0F2FE]' : 'text-[#8A94A6]'}>
+                  {item}
+                </span>
+                <span
+                  className={`inline-block h-1.5 w-1.5 rotate-45 ${
+                    idx % 3 === 0
+                      ? 'bg-[#38BDF8] shadow-[0_0_8px_#38BDF8]'
+                      : idx % 3 === 1
+                        ? 'bg-[#F5D061]'
+                        : 'bg-[#E11D2E]'
+                  }`}
+                />
               </span>
             ))}
           </div>
@@ -77,4 +88,3 @@ export function VelocityTicker({ reducedMotion }: { reducedMotion: boolean }) {
     </div>
   );
 }
-

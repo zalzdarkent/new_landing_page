@@ -2,31 +2,41 @@ import { AnimatePresence, motion } from 'motion/react';
 
 interface LiveGridOverlayProps {
   visible: boolean;
-  reducedMotion?: boolean;
 }
 
-export function LiveGridOverlay({ visible, reducedMotion }: LiveGridOverlayProps) {
+export function LiveGridOverlay({ visible }: LiveGridOverlayProps) {
   return (
     <AnimatePresence>
       {visible && (
         <motion.div
-          aria-hidden="true"
-          initial={reducedMotion ? undefined : { opacity: 0 }}
+          initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          exit={reducedMotion ? undefined : { opacity: 0 }}
-          transition={{ duration: 0.16, ease: [0.23, 1, 0.32, 1] }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.2 }}
+          aria-hidden="true"
           className="pointer-events-none fixed inset-0 z-40"
         >
+          {/* 12-column blueprint guides */}
           <div className="fw-container h-full">
             <div className="fw-grid h-full">
-              {Array.from({ length: 12 }).map((_, idx) => (
+              {Array.from({ length: 12 }).map((_, i) => (
                 <div
-                  key={idx}
-                  className={`h-full border-x border-[rgba(217,56,30,0.16)] bg-[rgba(217,56,30,0.04)] ${
-                    idx >= 4 && idx < 8 ? 'hidden md:block' : ''
-                  } ${idx >= 8 ? 'hidden lg:block' : ''}`}
+                  key={i}
+                  className="h-full border-x border-[#38BDF8]/10 bg-[#38BDF8]/[0.015]"
                 />
               ))}
+            </div>
+          </div>
+
+          {/* Center J.A.R.V.I.S. Targeting Reticle */}
+          <div className="absolute inset-0 flex items-center justify-center">
+            <div className="relative h-64 w-64 rounded-full border border-[#38BDF8]/20">
+              <div className="absolute inset-6 rounded-full border border-dashed border-[#38BDF8]/25" />
+              <div className="absolute top-1/2 left-0 right-0 h-px bg-[#38BDF8]/20" />
+              <div className="absolute left-1/2 top-0 bottom-0 w-px bg-[#38BDF8]/20" />
+              <span className="type-meta absolute -top-6 left-1/2 -translate-x-1/2 text-[10px] text-[#38BDF8]/80">
+                J.A.R.V.I.S. // HUD CALIBRATION
+              </span>
             </div>
           </div>
         </motion.div>
