@@ -10,25 +10,25 @@ interface ColophonFooterProps {
 const SCOPE_OPTIONS = [
   {
     id: 'spatial-flagship',
-    code: '01 // SPATIAL WEB',
+    code: '01',
     label: 'Spatial Web Flagship',
     duration: '07 WEEKS',
   },
   {
     id: 'editorial-monograph',
-    code: '02 // EDITORIAL',
+    code: '02',
     label: 'Digital Monograph & Type System',
     duration: '05 WEEKS',
   },
   {
     id: 'hardware-console',
-    code: '03 // INSTRUMENT UI',
+    code: '03',
     label: 'Hardware Companion Interface',
     duration: '07 WEEKS',
   },
   {
     id: 'retainer',
-    code: '04 // RETAINER',
+    code: '04',
     label: 'Principal Design-Engineering Partner',
     duration: 'QUARTERLY',
   },
@@ -161,9 +161,9 @@ export function ColophonFooter({
         {/* Interactive Scope Configurator + Commission Trigger */}
         <div className="fw-grid items-end gap-y-10 pb-16">
           <div className="col-span-4 md:col-span-5 lg:col-span-7">
-            <span className="type-meta mb-3 block text-[var(--accent-vermilion)]">
+            {/* <span className="type-meta mb-3 block text-[var(--accent-vermilion)]">
               STEP 01 // SELECT COMMISSION ARCHITECTURE
-            </span>
+            </span> */}
             <h2 className="type-h2 mb-6 text-[var(--ink-primary)]">
               Configure your inquiry scope before opening the dossier.
             </h2>
@@ -233,11 +233,6 @@ export function ColophonFooter({
                   →
                 </span>
               </button>
-            </div>
-
-            <div className="flex flex-wrap items-center gap-4 text-[var(--ink-secondary)]">
-              <span className="type-meta">ZURICH — {zurichTime}</span>
-              <span className="type-meta">JAKARTA — {jakartaTime}</span>
             </div>
           </div>
         </div>

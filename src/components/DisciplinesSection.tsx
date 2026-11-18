@@ -8,7 +8,7 @@ gsap.registerPlugin(ScrollTrigger, MorphSVGPlugin);
 
 const DISCIPLINES = [
   { word: 'Spatial web', tag: 'THREE.JS · R3F · GLSL', stat: '60', unit: 'FPS', fill: '#D9381E', d: superPath({ cx: 200, cy: 200, a: 140, b: 140, amp: 0.1, k: 3 }) },
-  { word: 'Type systems', tag: 'GRID · CLAMP · OPENTYPE', stat: '62', unit: 'CH', fill: '#161614', d: superPath({ cx: 200, cy: 200, a: 125, b: 125, e: 5 }) },
+  { word: 'Systems', tag: 'GRID · CLAMP · OPENTYPE', stat: '62', unit: 'CH', fill: '#161614', d: superPath({ cx: 200, cy: 200, a: 125, b: 125, e: 5 }) },
   { word: 'Motion', tag: 'GSAP · MOTION · LENIS', stat: '140', unit: 'MS', fill: '#9A968E', d: superPath({ cx: 200, cy: 200, a: 150, b: 120, amp: 0.2, k: 4, phase: 1.4 }) },
   { word: 'Instruments', tag: 'SVG · CANVAS · HARDWARE UI', stat: '1:1', unit: 'COUPLING', fill: '#CFC8BA', d: superPath({ cx: 200, cy: 200, a: 150, b: 150, e: 1.15 }) },
 ] as const;

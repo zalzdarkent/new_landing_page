@@ -35,8 +35,8 @@
   --grain-opacity: 0.032;
 
   /* Layout Rails */
-  --rail-padding: clamp(1.25rem, 4vw, 4rem);
-  --container-max: 90rem; /* 1440px */
+  --rail-padding: clamp(1.25rem, 2.5vw, 2.75rem);
+  --container-max: 110rem; /* 1760px */
 }
 
 @layer base {

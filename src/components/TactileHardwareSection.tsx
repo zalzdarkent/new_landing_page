@@ -91,7 +91,7 @@ export function TactileHardwareSection({
         <div className="fw-grid mb-12 items-end border-b border-[var(--border-hairline-dark)] pb-6 lg:mb-16">
           <div className="col-span-4 md:col-span-5 lg:col-span-7">
             <span className="type-meta mb-3 block text-[var(--accent-vermilion)]">
-              10 / PHYSICAL-TO-DIGITAL INSTRUMENTATION
+              PHYSICAL-TO-DIGITAL INSTRUMENTATION
             </span>
             <h2 className="type-h1 text-[var(--ink-on-dark)]">
               Taktil-04{' '}
@@ -112,7 +112,7 @@ export function TactileHardwareSection({
           <div className="flex flex-col justify-between rounded-[2px] border border-[var(--border-hairline-dark)] bg-[var(--bg-darkroom-elevated)] p-6 lg:col-span-4">
             <div className="flex items-center justify-between border-b border-[var(--border-hairline-dark)] pb-3">
               <span className="type-meta text-[var(--ink-on-dark-muted)]">
-                INST. 01 // 24-DETENT ENCODER
+                24-DETENT ENCODER
               </span>
               <span className="type-meta text-[var(--accent-vermilion)]">
                 {String(angleDeg).padStart(3, '0')}°
@@ -236,7 +236,7 @@ export function TactileHardwareSection({
           >
             <div className="flex items-center justify-between border-b border-[var(--border-hairline-dark)] pb-3">
               <span className="type-meta text-[var(--ink-on-dark-muted)]">
-                INST. 02 // MAGNETIC VECTOR ARRAY
+                MAGNETIC VECTOR ARRAY
               </span>
               <span className="type-meta text-[var(--accent-vermilion)]">
                 {vectorCursor.active ? 'COUPLED' : 'STANDBY'}
@@ -290,7 +290,7 @@ export function TactileHardwareSection({
           <div className="flex flex-col justify-between rounded-[2px] border border-[var(--border-hairline-dark)] bg-[var(--bg-darkroom-elevated)] p-6 lg:col-span-4">
             <div className="flex items-center justify-between border-b border-[var(--border-hairline-dark)] pb-3">
               <span className="type-meta text-[var(--ink-on-dark-muted)]">
-                INST. 03 // HARMONIC RATIO SYNTH
+                HARMONIC RATIO SYNTH
               </span>
               <span className="type-meta text-[var(--accent-vermilion)]">
                 {activePreset.label}

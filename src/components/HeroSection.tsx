@@ -195,9 +195,9 @@ export function HeroSection({
 
       {/* Main Spatial Grid */}
       <div className="fw-container relative z-10 my-auto">
-        <div className="fw-grid items-end gap-y-8 lg:gap-y-10">
+        <div className="fw-grid gap-y-8 lg:gap-y-10">
           {/* Left Editorial & Kinetic Zone: Cols 1-7 */}
-          <div className="col-span-4 md:col-span-8 lg:col-span-7">
+          <div className="col-span-4 flex flex-col md:col-span-8 lg:col-span-7">
             <div className="mb-4 flex flex-wrap items-center gap-2">
               <span className="type-meta rounded-[2px] border border-[var(--border-hairline)] bg-[var(--bg-surface)] px-2.5 py-1 text-[var(--ink-primary)]">
                 01 / SPATIAL &amp; TYPOGRAPHIC PRACTICE
@@ -221,7 +221,7 @@ export function HeroSection({
               <span className="block overflow-hidden pb-1">
                 <span className="hero-line-inner flex flex-wrap items-baseline gap-x-3 sm:gap-x-4">
                   <span>with</span>
-                  <button
+                  {/* <button
                     type="button"
                     ref={inlineFrameRef}
                     onClick={() => onNavigate('aperture')}
@@ -234,7 +234,7 @@ export function HeroSection({
                       className="h-full w-full object-cover transition-transform duration-300 ease-[var(--ease-out)] group-hover:scale-110"
                     />
                     <span className="pointer-events-none absolute inset-0 bg-[var(--accent-vermilion)]/15 opacity-0 transition-opacity duration-200 group-hover:opacity-100" />
-                  </button>
+                  </button> */}
                   <span>measured</span>
                 </span>
               </span>
@@ -298,7 +298,7 @@ export function HeroSection({
 
             <div
               ref={metaRef}
-              className="mt-7 border-t border-[var(--border-hairline)] pt-6 lg:mt-10"
+              className="mt-7 border-t border-[var(--border-hairline)] pt-6 lg:mt-auto"
             >
               <div className="flex flex-col items-start justify-between gap-6 sm:flex-row sm:items-end">
                 <p className="max-w-[36ch] text-base leading-relaxed text-[var(--ink-secondary)]">
@@ -354,7 +354,7 @@ export function HeroSection({
               </div>
 
               {/* Interactive Chapter Jump Index */}
-              <div className="mt-6 grid grid-cols-2 gap-2 border-t border-[var(--border-hairline)] pt-4 sm:grid-cols-4">
+              {/* <div className="mt-6 grid grid-cols-2 gap-2 border-t border-[var(--border-hairline)] pt-4 sm:grid-cols-4">
                 {[
                   { id: 'aperture', code: '01', label: 'Light Aperture' },
                   { id: 'typo', code: '02', label: 'Form + Work' },
@@ -381,7 +381,7 @@ export function HeroSection({
                     </span>
                   </button>
                 ))}
-              </div>
+              </div> */}
             </div>
           </div>
 
@@ -410,9 +410,6 @@ export function HeroSection({
             {/* Interactive Monolith Assembly & Daylight Control Deck */}
             <div className="mt-3 rounded-[2px] border border-[var(--border-hairline)] bg-[var(--bg-surface)] p-3">
               <div className="mb-2.5 flex items-center justify-between">
-                <span className="type-meta text-[var(--ink-secondary)]">
-                  INTERACTIVE RIG // SELECT ASSEMBLY STATE
-                </span>
                 <span className="type-meta text-[var(--accent-vermilion)]">
                   LIVE WEBGL
                 </span>
@@ -467,15 +464,6 @@ export function HeroSection({
               </div>
             </div>
           </div>
-        </div>
-      </div>
-
-      {/* Bottom Hairline Chapter Divider */}
-      <div className="fw-container relative z-10 mt-8">
-        <div className="flex flex-wrap items-center justify-between gap-4 border-t border-[var(--border-hairline)] pt-3.5 text-[var(--ink-secondary)]">
-          <span className="type-meta">
-            SCROLL TO MORPH ↓
-          </span>
         </div>
       </div>
     </section>

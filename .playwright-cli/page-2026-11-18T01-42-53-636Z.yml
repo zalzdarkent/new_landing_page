@@ -1,0 +1,371 @@
+- generic [ref=e3]:
+  - banner [ref=e4]:
+    - generic [ref=e5]:
+      - link "FORMWORK® ED. IV" [ref=e6] [cursor=pointer]:
+        - /url: "#hero"
+        - generic [ref=e7]: FORMWORK®
+        - generic [ref=e8]: ED. IV
+      - navigation "Primary chapters" [ref=e9]:
+        - link "01 Aperture" [ref=e10] [cursor=pointer]:
+          - /url: "#aperture"
+          - generic [ref=e11]: "01"
+          - generic [ref=e12]: Aperture
+        - link "02 Plates" [ref=e13] [cursor=pointer]:
+          - /url: "#works"
+          - generic [ref=e14]: "02"
+          - generic [ref=e15]: Plates
+        - link "03 Matter" [ref=e16] [cursor=pointer]:
+          - /url: "#shapes"
+          - generic [ref=e17]: "03"
+          - generic [ref=e18]: Matter
+        - link "04 Craft" [ref=e19] [cursor=pointer]:
+          - /url: "#capabilities"
+          - generic [ref=e20]: "04"
+          - generic [ref=e21]: Craft
+        - link "05 Practice" [ref=e22] [cursor=pointer]:
+          - /url: "#practice"
+          - generic [ref=e23]: "05"
+          - generic [ref=e24]: Practice
+      - generic [ref=e25]:
+        - button "[G] GRID" [ref=e26]:
+          - generic [ref=e27]: "[G]"
+          - generic [ref=e28]: GRID
+        - button "Commission" [ref=e29]
+  - main [ref=e30]:
+    - generic [ref=e31]:
+      - generic [ref=e33]:
+        - generic [ref=e34]: ARCHITECTURE OF DIGITAL MATTER
+        - generic [ref=e39]:
+          - generic [ref=e40]: VEC [0.00, 0.00]
+          - generic [ref=e41]: SUN 28° AZM
+          - generic [ref=e42]: SCRUB 00%
+      - generic [ref=e44]:
+        - generic [ref=e45]:
+          - generic [ref=e46]:
+            - generic [ref=e47]: 01 / SPATIAL & TYPOGRAPHIC PRACTICE
+            - generic [ref=e48]: ZURICH — JAKARTA
+          - 'heading "Digital matter cast with measured Current principle: proportion.. Click to cycle." [level=1] [ref=e49]':
+            - generic [ref=e50]: Digital matter cast
+            - generic [ref=e53]:
+              - generic [ref=e54]: with
+              - generic [ref=e55]: measured
+            - 'button "Current principle: proportion.. Click to cycle." [ref=e58]':
+              - generic [ref=e59]: proportion.
+              - generic [ref=e61]: 01/04 ↻
+          - generic [ref=e63]:
+            - paragraph [ref=e64]: Spatial, typographic, and kinetic systems cast with physical mass.
+            - generic [ref=e65]:
+              - link "Inspect Exhibition" [ref=e66] [cursor=pointer]:
+                - /url: "#works"
+                - generic [ref=e67]:
+                  - generic [ref=e68]: Inspect Exhibition
+                  - generic [aria-hidden] [ref=e69]: Inspect Exhibition
+                - generic [aria-hidden] [ref=e70]: 04 PLATES →
+              - button "COMMISSION BRIEF" [ref=e71]
+        - generic [ref=e72]:
+          - generic "Loading 3D monolith study" [ref=e73]:
+            - generic [ref=e74]: FIG. 01 — MONOLITH STUDY
+            - generic [ref=e75]: INITIALIZING WEBGL
+          - generic [ref=e76]:
+            - generic [ref=e77]: LIVE WEBGL
+            - tablist "3D Monolith assembly state" [ref=e79]:
+              - tab "01 Assembled" [selected] [ref=e80]
+              - tab "02 Exploded" [ref=e81]
+              - tab "03 Wireframe" [ref=e82]
+              - tab "04 Solar Study" [ref=e83]
+            - generic [ref=e84]:
+              - generic [ref=e85]: SOLAR INCIDENCE
+              - slider "SOLAR INCIDENCE" [ref=e86]: "28"
+              - generic [ref=e87]: +28°
+    - generic [ref=e90]:
+      - generic [ref=e91]:
+        - generic [ref=e92]: SPATIAL WEB ARCHITECTURE
+        - generic [ref=e95]: SWISS TYPOGRAPHIC MONOGRAPHS
+        - generic [ref=e98]: PHYSICAL-TO-DIGITAL INSTRUMENTS
+        - generic [ref=e101]: ORTHOGRAPHIC WAYFINDING
+        - generic [ref=e104]: 60FPS COMPOSITOR CHOREOGRAPHY
+      - generic [ref=e107]:
+        - generic [ref=e108]: SPATIAL WEB ARCHITECTURE
+        - generic [ref=e111]: SWISS TYPOGRAPHIC MONOGRAPHS
+        - generic [ref=e114]: PHYSICAL-TO-DIGITAL INSTRUMENTS
+        - generic [ref=e117]: ORTHOGRAPHIC WAYFINDING
+        - generic [ref=e120]: 60FPS COMPOSITOR CHOREOGRAPHY
+    - region "Light is material" [ref=e123]:
+      - generic [ref=e124]:
+        - img "Concrete pavilion with geometric sunlight" [ref=e125]
+        - generic [ref=e129]:
+          - heading "Light is material." [level=2] [ref=e130]:
+            - generic [ref=e131]: Light
+            - generic [ref=e132]: is material.
+          - generic [ref=e133]:
+            - generic [ref=e134]: KUROKAWA ANNEX — BASEL
+            - generic [ref=e135]:
+              - button "08:00" [ref=e136]
+              - button "12:15" [pressed] [ref=e137]
+              - button "17:40" [ref=e138]
+              - generic [ref=e139]: 000%
+    - region "Form and work" [ref=e140]:
+      - generic [ref=e141]:
+        - generic [aria-hidden] [ref=e142]: FORM
+        - generic [aria-hidden] [ref=e143]: WORK
+        - heading "Form and work" [level=2] [ref=e144]
+        - img "Machined instrument on limestone" [ref=e146]
+        - generic [ref=e147]:
+          - generic [ref=e148]: SPATIAL · TYPOGRAPHIC · INTERACTIVE
+          - generic [ref=e149]: FORM + WORK = FORMWORK®
+    - region "Selected plates" [ref=e150]:
+      - generic [ref=e152]:
+        - figure "01 Kurokawa Light Pavilion" [ref=e153]:
+          - img "Sunlit raw concrete gallery pavilion with crisp geometric light shafts across limestone walls" [ref=e154]
+          - button "Open Kurokawa Light Pavilion" [ref=e155] [cursor=pointer]
+          - generic:
+            - generic: "01"
+            - generic: Kurokawa Light Pavilion
+        - figure "02 Taktil-04 Drafting Instrument" [ref=e156]:
+          - img "Precision-machined matte charcoal and brushed aluminum drafting instrument on a warm limestone plinth" [ref=e157]
+          - button "Open Taktil-04 Drafting Instrument" [ref=e158] [cursor=pointer]
+          - generic:
+            - generic: "02"
+            - generic: Taktil-04 Drafting Instrument
+        - 'figure "03 Monograph XII: On Proportion" [ref=e159]':
+          - img "Thick linen-bound architectural monograph book open on a raw stone surface under directional side light" [ref=e160]
+          - 'button "Open Monograph XII: On Proportion" [ref=e161] [cursor=pointer]'
+          - generic:
+            - generic: "03"
+            - generic: "Monograph XII: On Proportion"
+        - figure "04 Aether-09 Acoustic Reference Console" [ref=e162]:
+          - img "Close-up concrete tie-rod recess meeting brushed stainless steel acoustic reveal" [ref=e163]
+          - button "Open Aether-09 Acoustic Reference Console" [ref=e164] [cursor=pointer]
+          - generic:
+            - generic: "04"
+            - generic: Aether-09 Acoustic Reference Console
+        - generic [ref=e165]:
+          - generic [ref=e166]: SELECTED WORK / 2024–26
+          - heading "Four plates." [level=2] [ref=e167]
+    - region "Grid, type, motion, matter" [ref=e168]:
+      - generic [ref=e170]:
+        - generic [ref=e171]:
+          - heading "Grid" [level=2] [ref=e172]
+          - heading "Type" [level=2] [ref=e173]
+          - heading "Motion" [level=2] [ref=e174]
+          - heading "Matter" [level=2] [ref=e175]
+        - generic [ref=e176]:
+          - generic:
+            - generic:
+              - text: "12"
+              - generic: COLUMNS
+            - generic:
+              - text: "62"
+              - generic: CH MEASURE
+            - generic:
+              - text: "220"
+              - generic: STIFFNESS
+            - generic:
+              - text: "1.48"
+              - generic: GLASS IOR
+    - generic [ref=e182]:
+      - generic [ref=e183]:
+        - list [ref=e184]:
+          - listitem [ref=e185]:
+            - button "Spatial web THREE.JS · R3F · GLSL" [ref=e186]:
+              - generic [ref=e187]: Spatial web
+              - generic [ref=e188]: THREE.JS · R3F · GLSL
+          - listitem [ref=e189]:
+            - button "Systems GRID · CLAMP · OPENTYPE" [ref=e190]:
+              - generic [ref=e191]: Systems
+              - generic [ref=e192]: GRID · CLAMP · OPENTYPE
+          - listitem [ref=e193]:
+            - button "Motion GSAP · MOTION · LENIS" [ref=e194]:
+              - generic [ref=e195]: Motion
+              - generic [ref=e196]: GSAP · MOTION · LENIS
+          - listitem [ref=e197]:
+            - button "Instruments SVG · CANVAS · HARDWARE UI" [ref=e198]:
+              - generic [ref=e199]: Instruments
+              - generic [ref=e200]: SVG · CANVAS · HARDWARE UI
+        - generic [ref=e201]:
+          - generic:
+            - generic: "60"
+            - generic: FPS
+      - list [ref=e208]:
+        - listitem [ref=e209]:
+          - generic [ref=e211]: Excavate
+          - text: W1
+        - listitem [ref=e212]:
+          - generic [ref=e214]: Formwork
+          - text: W2–3
+        - listitem [ref=e215]:
+          - generic [ref=e217]: Cast
+          - text: W4–5
+        - listitem [ref=e218]:
+          - generic [ref=e220]: Cure
+          - text: W6
+        - listitem [ref=e221]:
+          - generic [ref=e223]: Verify
+          - text: W7
+    - region "Taktil-04 Hardware Instrumentation Console" [ref=e224]:
+      - generic [ref=e225]:
+        - generic [ref=e226]:
+          - generic [ref=e227]:
+            - generic [ref=e228]: PHYSICAL-TO-DIGITAL INSTRUMENTATION
+            - heading "Taktil-04 Reference Deck" [level=2] [ref=e229]
+          - generic [ref=e230]: OPERATE ROTARY DETENTS, VECTOR FIELD & HARMONIC SYNTH
+        - generic [ref=e231]:
+          - generic [ref=e232]:
+            - generic [ref=e233]:
+              - generic [ref=e234]: 24-DETENT ENCODER
+              - generic [ref=e235]: 120°
+            - generic [ref=e236]:
+              - generic [ref=e237]:
+                - img [ref=e238]:
+                  - generic [ref=e240] [cursor=pointer]
+                  - generic [ref=e242] [cursor=pointer]
+                  - generic [ref=e244] [cursor=pointer]
+                  - generic [ref=e246] [cursor=pointer]
+                  - generic [ref=e248] [cursor=pointer]
+                  - generic [ref=e250] [cursor=pointer]
+                  - generic [ref=e252] [cursor=pointer]
+                  - generic [ref=e254] [cursor=pointer]
+                  - generic [ref=e256] [cursor=pointer]
+                  - generic [ref=e258] [cursor=pointer]
+                  - generic [ref=e260] [cursor=pointer]
+                  - generic [ref=e262] [cursor=pointer]
+                  - generic [ref=e264] [cursor=pointer]
+                  - generic [ref=e266] [cursor=pointer]
+                  - generic [ref=e268] [cursor=pointer]
+                  - generic [ref=e270] [cursor=pointer]
+                  - generic [ref=e272] [cursor=pointer]
+                  - generic [ref=e274] [cursor=pointer]
+                  - generic [ref=e276] [cursor=pointer]
+                  - generic [ref=e278] [cursor=pointer]
+                - generic:
+                  - generic: STEP
+                  - generic: 09/24
+              - generic [ref=e281]:
+                - button "− STEP CCW" [ref=e282]
+                - button "+ STEP CW" [ref=e283]
+            - generic [ref=e284]:
+              - generic [ref=e285]: "TORQUE: 0.32 N·m"
+              - generic [ref=e286]: 15° MECHANICAL LOCK
+          - generic [ref=e287]:
+            - generic [ref=e288]:
+              - generic [ref=e289]: MAGNETIC VECTOR ARRAY
+              - generic [ref=e290]: STANDBY
+            - generic [ref=e401]:
+              - generic [ref=e402]: 54 ORTHOGRAPHIC VECTORS
+              - generic [ref=e403]: SWEEP POINTER TO ALIGN
+          - generic [ref=e404]:
+            - generic [ref=e405]:
+              - generic [ref=e406]: HARMONIC RATIO SYNTH
+              - generic [ref=e407]: "1 : 1.618 PHI"
+            - generic [ref=e412]:
+              - button "1:1" [ref=e413]
+              - button "1:1.414" [ref=e414]
+              - button "1:1.618" [ref=e415]
+              - button "2:3" [ref=e416]
+              - button "3:4" [ref=e417]
+            - generic [ref=e418]:
+              - generic [ref=e419]: PHASE-LOCKED OSCILLATOR
+              - generic [ref=e420]: COUPLED TO ENCODER
+    - generic [ref=e422]:
+      - generic [ref=e423]:
+        - heading "Sketch vs. form" [level=2] [ref=e424]
+        - generic [ref=e425]: DRAG ↔ 55%
+      - generic [ref=e426]:
+        - paragraph [ref=e429]: Form followsfriction.
+        - generic:
+          - generic:
+            - generic:
+              - paragraph: Form followsfriction.
+        - slider "Sketch versus Formwork" [ref=e441]:
+          - generic [ref=e442]: ↔
+    - generic [ref=e445]:
+      - generic [ref=e446]:
+        - paragraph [ref=e447]: Form follows friction.
+        - paragraph [ref=e448]: Detail compounds trust.
+        - paragraph [ref=e449]: Motion is architecture in time.
+      - generic [ref=e450]:
+        - generic [ref=e451]:
+          - generic [ref=e452]: LEDGER 2024–26
+          - generic [ref=e453]: ZURICH — JAKARTA
+        - list [ref=e454]:
+          - listitem [ref=e455]:
+            - generic [ref=e456]: ARC-26.04
+            - generic [ref=e457]: Kurokawa Light Pavilion
+            - generic [ref=e458]: "2026"
+          - listitem [ref=e459]:
+            - generic [ref=e460]: ARC-26.01
+            - generic [ref=e461]: Aether-09 Acoustic Console
+            - generic [ref=e462]: "2026"
+          - listitem [ref=e463]:
+            - generic [ref=e464]: ARC-25.09
+            - generic [ref=e465]: Taktil-04 Drafting Instrument
+            - generic [ref=e466]: "2025"
+          - listitem [ref=e467]:
+            - generic [ref=e468]: ARC-25.05
+            - generic [ref=e469]: "Monograph XII: On Proportion"
+            - generic [ref=e470]: "2025"
+          - listitem [ref=e471]:
+            - generic [ref=e472]: ARC-24.11
+            - generic [ref=e473]: Sihlfeld Concrete Foundry Index
+            - generic [ref=e474]: "2024"
+          - listitem [ref=e475]:
+            - generic [ref=e476]: ARC-24.06
+            - generic [ref=e477]: Kemang Tropical Brutalism Archive
+            - generic [ref=e478]: "2024"
+  - contentinfo [ref=e479]:
+    - generic [ref=e480]:
+      - generic [ref=e481]:
+        - generic [ref=e482]: 15 / FINAL STATEMENT & COMMISSIONING
+        - paragraph [ref=e483]: Form is what remains when every shortcut is removed.
+      - generic [ref=e484]:
+        - generic [ref=e485]:
+          - heading "Configure your inquiry scope before opening the dossier." [level=2] [ref=e486]
+          - generic [ref=e487]:
+            - button "01 07 WEEKS Spatial Web Flagship" [ref=e488]:
+              - generic [ref=e489]:
+                - generic [ref=e490]: "01"
+                - generic [ref=e491]: 07 WEEKS
+              - generic [ref=e492]: Spatial Web Flagship
+            - button "02 05 WEEKS Digital Monograph & Type System" [ref=e493]:
+              - generic [ref=e494]:
+                - generic [ref=e495]: "02"
+                - generic [ref=e496]: 05 WEEKS
+              - generic [ref=e497]: Digital Monograph & Type System
+            - button "03 07 WEEKS Hardware Companion Interface" [ref=e498]:
+              - generic [ref=e499]:
+                - generic [ref=e500]: "03"
+                - generic [ref=e501]: 07 WEEKS
+              - generic [ref=e502]: Hardware Companion Interface
+            - button "04 QUARTERLY Principal Design-Engineering Partner" [ref=e503]:
+              - generic [ref=e504]:
+                - generic [ref=e505]: "04"
+                - generic [ref=e506]: QUARTERLY
+              - generic [ref=e507]: Principal Design-Engineering Partner
+        - generic [ref=e509]:
+          - generic [ref=e510]:
+            - generic [ref=e511]: SELECTED TRACK
+            - generic [ref=e512]: 07 WEEKS
+          - paragraph [ref=e513]: Spatial Web Flagship
+          - button "Open Commission Dossier" [ref=e514]:
+            - generic [ref=e515]:
+              - generic [ref=e516]: Open Commission Dossier
+              - generic [aria-hidden] [ref=e517]: Open Commission Dossier
+            - generic [aria-hidden] [ref=e518]: →
+      - generic [ref=e519]:
+        - generic [ref=e520]:
+          - generic [ref=e521]: FORMWORK® EDITION IV
+          - generic [ref=e522]: SET IN CABINET GROTESK, INSTRUMENT SERIF & JETBRAINS MONO
+        - generic [ref=e523]:
+          - generic [ref=e524]: PRESS [G] FOR SWISS GRID
+          - link "STUDIO@FORMWORK.EXAMPLE" [ref=e525] [cursor=pointer]:
+            - /url: mailto:studio@formwork.example
+      - generic [ref=e527]:
+        - generic [ref=e528]: F
+        - generic [ref=e529]: O
+        - generic [ref=e530]: R
+        - generic [ref=e531]: M
+        - generic [ref=e532]: W
+        - generic [ref=e533]: O
+        - generic [ref=e534]: R
+        - generic [ref=e535]: K
+        - generic [ref=e536]: ®
